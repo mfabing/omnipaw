@@ -27,29 +27,7 @@ With OmniPaw, care responsibilities can be handed off smoothly — without losin
    ```bash
    git clone https://github.com/your-username/omnipaw.git
    ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
 
 ## 🤝 Contributing
 
 Contributions are welcome! Feel free to open an issue or submit a pull request.
-
-## 📄 License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
-Done! I created the OmniPaw README.md as a canvas you can preview, edit, and export.
-
-It includes:
-- A short intro explaining what OmniPaw is
-- Features (tracking, health schedules, documents, care handoffs)
-- Who it's for (owners, families, sitters, boarding facilities)
-- Getting started, contributing, and license sections
-
-Feel free to ask if you'd like me to tweak the tone, add a tech stack section, badges, or screenshots placeholders.
