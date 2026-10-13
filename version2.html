@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Omnipaw | Shared Pet Care, Simplified</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons Script -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            /* Custom Theme Colors */
+            --op-primary: #4A3AFF; /* Vibrant Indigo */
+            --op-secondary: #FF6B6B; /* Coral */
+            --op-accent: #FFD166; /* Warm Yellow */
+            --op-dark: #1A1A2E; /* Deep Navy */
+            --op-light: #FDFBF7; /* Warm Off-white */
+            --op-surface: #FFFFFF;
+            
+            /* Bootstrap overrides */
+            --bs-body-font-family: 'Outfit', sans-serif;
+            --bs-body-bg: var(--op-light);
+            --bs-body-color: var(--op-dark);
+            --bs-primary: var(--op-primary);
+            --bs-primary-rgb: 74, 58, 255;
+            --bs-secondary: var(--op-secondary);
+        }
+
+        body {
+            font-family: var(--bs-body-font-family);
+            background-color: var(--bs-body-bg);
+            color: var(--bs-body-color);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Typography & Utilities */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        
+        .text-primary-custom { color: var(--op-primary) !important; }
+        .text-secondary-custom { color: var(--op-secondary) !important; }
+        .bg-primary-custom { background-color: var(--op-primary) !important; }
+        .bg-secondary-custom { background-color: var(--op-secondary) !important; }
+        .bg-dark-custom { background-color: var(--op-dark) !important; }
+
+        /* Buttons with Micro-animations */
+        .btn-omnipaw {
+            background-color: var(--op-primary);
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 32px;
+            font-weight: 600;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .btn-omnipaw::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.6s ease;
+            z-index: -1;
+        }
+        .btn-omnipaw:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 15px 25px rgba(74, 58, 255, 0.25);
+            color: #fff;
+        }
+        .btn-omnipaw:hover::before {
+            left: 100%;
+        }
+        
+        .btn-omnipaw-outline {
+            background-color: transparent;
+            color: var(--op-dark);
+            border: 2px solid rgba(26, 26, 46, 0.1);
+            border-radius: 50px;
+            padding: 10px 28px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-omnipaw-outline:hover {
+            border-color: var(--op-primary);
+            color: var(--op-primary);
+            transform: translateY(-2px);
+        }
+
+        /* Glassmorphism Navbar */
+        .navbar-glass {
+            background: rgba(253, 251, 247, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(26, 26, 46, 0.05);
+            transition: all 0.4s ease;
+        }
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--op-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .navbar-brand svg { stroke: var(--op-primary); }
+
+        /* Hero Section */
+        .hero-section {
+            padding: 160px 0 100px;
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .hero-title {
+            font-size: clamp(3rem, 5vw, 5.5rem);
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+        
+        /* Floating Graphic Elements */
+        .floating-element {
+            position: absolute;
+            animation: float 6s ease-in-out infinite;
+            z-index: -1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        }
+        .float-1 { top: 15%; right: 10%; width: 80px; height: 80px; background: var(--op-surface); animation-delay: 0s; }
+        .float-2 { bottom: 20%; left: 5%; width: 100px; height: 100px; background: var(--op-surface); animation-delay: -2s; }
+        .float-3 { top: 30%; left: 12%; width: 60px; height: 60px; background: var(--op-accent); animation-delay: -4s; }
+        .float-3 svg { stroke: #fff; }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        /* Gradient Mesh Background */
+        .bg-mesh {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden;
+            z-index: -2;
+            opacity: 0.6;
+        }
+        .mesh-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: moveBlobs 20s infinite alternate;
+        }
+        .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: var(--op-primary); }
+        .blob-2 { bottom: -20%; right: -10%; width: 60vw; height: 60vw; background: var(--op-secondary); animation-delay: -5s; }
+        
+        @keyframes moveBlobs {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(10%, 10%) scale(1.1); }
+        }
+
+        /* Infinite Marquee */
+        .marquee-container {
+            background-color: var(--op-dark);
+            color: var(--op-light);
+            padding: 24px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            transform: rotate(-2deg);
+            margin: 40px -20px;
+            width: calc(100% + 40px);
+        }
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 25s linear infinite;
+        }
+        .marquee-item {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 40px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .marquee-item svg { margin-right: 12px; color: var(--op-secondary); }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Features Section & Cards */
+        .section-padding { padding: 120px 0; }
+        
+        .feature-card {
+            background: var(--op-surface);
+            border-radius: 32px;
+            padding: 40px;
+            height: 100%;
+            border: 1px solid rgba(26,26,46,0.03);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(26, 26, 46, 0.08);
+            border-color: rgba(74, 58, 255, 0.1);
+        }
+        .feature-icon-wrapper {
+            width: 72px; height: 72px;
+            border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 24px;
+            transition: transform 0.4s ease;
+        }
+        .feature-card:hover .feature-icon-wrapper {
+            transform: scale(1.1) rotate(-5deg);
+        }
+        
+        .bg-icon-primary { background: rgba(74, 58, 255, 0.1); color: var(--op-primary); }
+        .bg-icon-secondary { background: rgba(255, 107, 107, 0.1); color: var(--op-secondary); }
+        .bg-icon-accent { background: rgba(255, 209, 102, 0.2); color: #E5A910; }
+
+        /* Audience Tabs (Interactive) */
+        .nav-pills-custom .nav-link {
+            color: var(--op-dark);
+            border-radius: 50px;
+            padding: 12px 24px;
+            font-weight: 600;
+            background: transparent;
+            border: 1px solid rgba(26,26,46,0.1);
+            transition: all 0.3s ease;
+            margin: 0 8px 12px 0;
+        }
+        .nav-pills-custom .nav-link.active,
+        .nav-pills-custom .nav-link:hover {
+            background-color: var(--op-dark);
+            color: var(--op-light);
+            border-color: var(--op-dark);
+        }
+        .audience-image {
+            border-radius: 32px;
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            transition: all 0.5s ease;
+        }
+
+        /* How it Works Stepper */
+        .step-wrapper {
+            position: relative;
+            padding-left: 48px;
+            margin-bottom: 40px;
+        }
+        .step-wrapper::before {
+            content: '';
+            position: absolute;
+            left: 20px; top: 40px; bottom: -40px;
+            width: 2px;
+            background: rgba(74, 58, 255, 0.15);
+            z-index: 0;
+        }
+        .step-wrapper:last-child::before { display: none; }
+        
+        .step-number {
+            position: absolute;
+            left: 0; top: 0;
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: var(--op-primary);
+            color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700;
+            z-index: 1;
+            box-shadow: 0 0 0 8px var(--op-light);
+            transition: transform 0.3s ease;
+        }
+        .step-wrapper:hover .step-number {
+            transform: scale(1.1);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background-color: var(--op-primary);
+            border-radius: 40px;
+            margin: 40px 20px;
+            padding: 80px 40px;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        .cta-section::before {
+            content: ''; position: absolute;
+            width: 300px; height: 300px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            top: -100px; left: -100px;
+        }
+        .cta-section::after {
+            content: ''; position: absolute;
+            width: 200px; height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            bottom: -50px; right: -50px;
+        }
+        .btn-cta {
+            background: #fff;
+            color: var(--op-primary);
+            border-radius: 50px;
+            padding: 16px 40px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .btn-cta:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            color: var(--op-primary);
+        }
+
+        /* Scroll Reveal Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 0 20px;
+            background: transparent;
+            color: var(--op-dark);
+        }
+        .social-icon {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: rgba(26,26,46,0.05);
+            color: var(--op-dark);
+            transition: all 0.3s ease;
+        }
+        .social-icon:hover {
+            background: var(--op-primary);
+            color: #fff;
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top navbar-glass py-3">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i data-lucide="paw-print"></i> Omnipaw
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-toggle="target="#navbarNav">
+                <i data-lucide="menu"></i>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-center gap-2 gap-lg-4">
+                    <li class="nav-item"><a class="nav-link fw-medium text-dark" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link fw-medium text-dark" href="#how-it-works">How it Works</a></li>
+                    <li class="nav-item"><a class="nav-link fw-medium text-dark" href="#audience">For Who</a></li>
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn-omnipaw-outline text-decoration-none d-inline-block mb-2 mb-lg-0 w-100 text-center" href="#">Log In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn-omnipaw text-decoration-none d-inline-block w-100 text-center" href="#">Get Started</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="bg-mesh">
+            <div class="mesh-blob blob-1"></div>
+            <div class="mesh-blob blob-2"></div>
+        </div>
+        
+        <!-- Animated Background Elements -->
+        <div class="floating-element float-1 text-primary-custom"><i data-lucide="bone" width="32" height="32"></i></div>
+        <div class="floating-element float-2 text-secondary-custom"><i data-lucide="heart-pulse" width="40" height="40"></i></div>
+        <div class="floating-element float-3"><i data-lucide="calendar-clock" width="28" height="28"></i></div>
+
+        <div class="container text-center reveal active">
+            <div class="row justify-content-center">
+                <div class="col-lg-9 col-xl-8">
+                    <span class="badge rounded-pill bg-white text-primary-custom border px-3 py-2 mb-4 fs-6 shadow-sm">
+                        ✨ The New Standard for Pet Care
+                    </span>
+                    <h1 class="hero-title">Shared Pet Care, <br><span class="text-primary-custom">Simplified.</span></h1>
+                    <p class="lead text-muted mb-5 px-md-5">
+                        Omnipaw is the unified digital platform keeping tracking tools, health schedules, and essential documents in one place for families, sitters, and boarding facilities.
+                    </p>
+                    <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+                        <a href="#features" class="btn-omnipaw text-decoration-none d-flex align-items-center justify-content-center gap-2">
+                            Start for free <i data-lucide="arrow-right" width="18"></i>
+                        </a>
+                        <a href="#how-it-works" class="btn-omnipaw-outline text-decoration-none d-flex align-items-center justify-content-center gap-2">
+                            <i data-lucide="play-circle" width="18"></i> Watch Demo
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Hero Image/Mockup Context -->
+            <div class="row justify-content-center mt-5 pt-4">
+                <div class="col-lg-10">
+                    <div class="position-relative">
+                        <img src="https://placehold.co/1200x600/E8E6FC/1A1A2E?text=Omnipaw+App+Dashboard+Interface" class="img-fluid rounded-4 shadow-lg border" alt="Omnipaw Dashboard" style="border-radius: 40px !important;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marquee Banner -->
+    <div class="marquee-container">
+        <div class="marquee-content">
+            <!-- Repeated content for infinite effect -->
+            <span class="marquee-item"><i data-lucide="check-circle"></i> Seamless Handoffs</span>
+            <span class="marquee-item"><i data-lucide="check-circle"></i> Vax Records</span>
+            <span class="marquee-item"><i data-lucide="check-circle"></i> Feeding Schedules</span>
+            <span class="marquee-item"><i data-lucide="check-circle"></i> Medication Alerts</span>
+            <span class="marquee-item"><i data-lucide="check-circle"></i> Shared Access</span>
+            <span class="marquee-item"><i data-lucide="check-circle"></i> Vet Contacts</span>
+            
+            <span class="marquee-item"><i data-lucide="check-circle"></i> Seamless Handoffs</span>
+            <span class="marquee-item"><i data-lucide="check-circle"></i> Vax Records</span>
+            <span class="marquee-item"><i data-lucide="check-circle"></i> Feeding Schedules</span>
+            <span class="marquee-item"><i data-lucide="check-circle"></i> Medication Alerts</span>
+            <span class="marquee-item"><i data-lucide="check-circle"></i> Shared Access</span>
+            <span class="marquee-item"><i data-lucide="check-circle"></i> Vet Contacts</span>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <section id="features" class="section-padding">
+        <div class="container">
+            <div class="text-center mb-5 pb-3 reveal">
+                <h2 class="display-5 mb-3">One Unified Location</h2>
+                <p class="lead text-muted mx-auto" style="max-width: 600px;">Stop using sticky notes, group chats, and scattered papers. Everything your pet needs is instantly accessible.</p>
+            </div>
+            
+            <div class="row g-4">
+                <!-- Feature 1 -->
+                <div class="col-md-4 reveal">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper bg-icon-primary">
+                            <i data-lucide="activity" width="32" height="32"></i>
+                        </div>
+                        <h4>Routine Tracking</h4>
+                        <p class="text-muted mt-3 mb-0">Log walks, bathroom breaks, and mood. Ensure everyone is on the same page regarding daily activities without asking.</p>
+                    </div>
+                </div>
+                <!-- Feature 2 -->
+                <div class="col-md-4 reveal" style="transition-delay: 100ms;">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper bg-icon-secondary">
+                            <i data-lucide="pill" width="32" height="32"></i>
+                        </div>
+                        <h4>Health Schedules</h4>
+                        <p class="text-muted mt-3 mb-0">Set automated alerts for medications, flea treatments, and upcoming vet appointments. Never miss a dose again.</p>
+                    </div>
+                </div>
+                <!-- Feature 3 -->
+                <div class="col-md-4 reveal" style="transition-delay: 200ms;">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper bg-icon-accent">
+                            <i data-lucide="folder-open" width="32" height="32"></i>
+                        </div>
+                        <h4>Important Documents</h4>
+                        <p class="text-muted mt-3 mb-0">Store vaccination records, insurance papers, and microchip info securely. Share easily with boarding facilities or vets.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="section-padding bg-white">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-5 mb-lg-0 reveal">
+                    <img src="https://placehold.co/600x700/FDFBF7/4A3AFF?text=Mobile+App+Interface" alt="Omnipaw App" class="img-fluid rounded-4 shadow">
+                </div>
+                <div class="col-lg-5 offset-lg-1 reveal" style="transition-delay: 200ms;">
+                    <h2 class="display-5 mb-5">Seamless handoffs, zero anxiety.</h2>
+                    
+                    <div class="step-wrapper">
+                        <div class="step-number">1</div>
+                        <h4 class="mb-2">Create your pet's profile</h4>
+                        <p class="text-muted">Add basic info, upload their cutest photo, and input essential details like vet contacts and microchip number.</p>
+                    </div>
+                    
+                    <div class="step-wrapper">
+                        <div class="step-number">2</div>
+                        <h4 class="mb-2">Set the routine</h4>
+                        <p class="text-muted">Input feeding times, medication schedules, and walk routines. The app builds a daily checklist automatically.</p>
+                    </div>
+                    
+                    <div class="step-wrapper">
+                        <div class="step-number">3</div>
+                        <h4 class="mb-2">Invite your care team</h4>
+                        <p class="text-muted mb-0">Add family members, dog walkers, or sitters. They get instant access to the schedule and can check off tasks live.</p>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Target Audience Section -->
+    <section id="audience" class="section-padding">
+        <div class="container">
+            <div class="text-center mb-5 pb-3 reveal">
+                <h2 class="display-5 mb-3">Built for the whole pack</h2>
+                <p class="lead text-muted mx-auto" style="max-width: 600px;">Omnipaw adapts to the needs of everyone involved in your pet's life.</p>
+            </div>
+
+            <div class="row align-items-center mt-4">
+                <div class="col-lg-5 reveal">
+                    <!-- Nav Tabs -->
+                    <ul class="nav nav-pills nav-pills-custom flex-row flex-wrap mb-4" id="audience-tabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="owners-tab" data-bs-toggle="pill" data-bs-target="#owners" type="button" role="tab">Pet Owners</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="sitters-tab" data-bs-toggle="pill" data-bs-target="#sitters" type="button" role="tab">Pet Sitters</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="boarding-tab" data-bs-toggle="pill" data-bs-target="#boarding" type="button" role="tab">Boarding Facilities</button>
+                        </li>
+                    </ul>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content" id="audience-content">
+                        <!-- Owners -->
+                        <div class="tab-pane fade show active" id="owners" role="tabpanel">
+                            <h3 class="mb-3">Peace of mind, anywhere you are.</h3>
+                            <p class="text-muted fs-5 mb-4">Leave town knowing your pet is in good hands. Get real-time updates when tasks are completed, and ensure your sitter has every emergency contact and medical record instantly available on their phone.</p>
+                            <ul class="list-unstyled text-muted">
+                                <li class="mb-2 d-flex align-items-center gap-2"><i data-lucide="check" class="text-primary-custom" width="20"></i> Centralized family care</li>
+                                <li class="mb-2 d-flex align-items-center gap-2"><i data-lucide="check" class="text-primary-custom" width="20"></i> Real-time completion notifications</li>
+                                <li class="mb-2 d-flex align-items-center gap-2"><i data-lucide="check" class="text-primary-custom" width="20"></i> Lifetime medical history archive</li>
+                            </ul>
+                        </div>
+                        <!-- Sitters -->
+                        <div class="tab-pane fade" id="sitters" role="tabpanel">
+                            <h3 class="mb-3">Professional care, simplified.</h3>
+                            <p class="text-muted fs-5 mb-4">No more losing physical notes or scrolling through text threads to find feeding instructions. Impress clients with a professional approach by checking off tasks they can see in real-time.</p>
+                            <ul class="list-unstyled text-muted">
+                                <li class="mb-2 d-flex align-items-center gap-2"><i data-lucide="check" class="text-primary-custom" width="20"></i> Clear instructions, no guessing</li>
+                                <li class="mb-2 d-flex align-items-center gap-2"><i data-lucide="check" class="text-primary-custom" width="20"></i> Easy client communication</li>
+                                <li class="mb-2 d-flex align-items-center gap-2"><i data-lucide="check" class="text-primary-custom" width="20"></i> Manage multiple pets easily</li>
+                            </ul>
+                        </div>
+                        <!-- Boarding -->
+                        <div class="tab-pane fade" id="boarding" role="tabpanel">
+                            <h3 class="mb-3">Streamlined intake & compliance.</h3>
+                            <p class="text-muted fs-5 mb-4">Make check-ins a breeze. Have clients share their pet's Omnipaw profile before arrival to ensure all vaccinations are up-to-date and behavioral notes are documented.</p>
+                            <ul class="list-unstyled text-muted">
+                                <li class="mb-2 d-flex align-items-center gap-2"><i data-lucide="check" class="text-primary-custom" width="20"></i> Instant vaccine verification</li>
+                                <li class="mb-2 d-flex align-items-center gap-2"><i data-lucide="check" class="text-primary-custom" width="20"></i> Dietary restriction tracking</li>
+                                <li class="mb-2 d-flex align-items-center gap-2"><i data-lucide="check" class="text-primary-custom" width="20"></i> Reduced liability and paperwork</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6 offset-lg-1 mt-5 mt-lg-0 reveal" style="transition-delay: 200ms;">
+                    <!-- Dynamic Image swapping could be done via JS, using a placeholder representing the tab content for now -->
+                    <img src="https://placehold.co/800x600/4A3AFF/FFFFFF?text=Happy+Dog+and+Owner" id="audience-img" class="audience-image shadow-lg" alt="Audience specific features">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="container reveal">
+        <div class="cta-section">
+            <h2 class="display-4 fw-bold mb-4">Ready to simplify your pet care?</h2>
+            <p class="fs-5 mb-5 opacity-75 mx-auto" style="max-width: 600px;">Join thousands of pet owners, families, and professionals who trust Omnipaw to keep their furry friends happy and healthy.</p>
+            <a href="#" class="btn-cta">
+                Get Omnipaw for Free
+            </a>
+            <p class="mt-4 fs-6 opacity-50 mb-0">Available on iOS, Android, and Web.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row gy-4 mb-5">
+                <div class="col-lg-4">
+                    <a class="navbar-brand mb-3 d-inline-flex align-items-center gap-2 fs-4 text-dark text-decoration-none" href="#">
+                        <i data-lucide="paw-print"></i> Omnipaw
+                    </a>
+                    <p class="text-muted pe-lg-5">The unified digital platform designed to simplify shared pet care, handoffs, and health tracking.</p>
+                    <div class="d-flex gap-3 mt-4">
+                        <a href="#" class="social-icon"><i data-lucide="twitter" width="18"></i></a>
+                        <a href="#" class="social-icon"><i data-lucide="instagram" width="18"></i></a>
+                        <a href="#" class="social-icon"><i data-lucide="facebook" width="18"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-6 offset-lg-2">
+                    <h5 class="mb-4 fs-6 text-uppercase tracking-wider">Product</h5>
+                    <ul class="list-unstyled text-muted d-flex flex-column gap-2">
+                        <li><a href="#" class="text-decoration-none text-muted">Features</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted">Pricing</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted">For Sitters</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted">For Boarding</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-6">
+                    <h5 class="mb-4 fs-6 text-uppercase tracking-wider">Resources</h5>
+                    <ul class="list-unstyled text-muted d-flex flex-column gap-2">
+                        <li><a href="#" class="text-decoration-none text-muted">Blog</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted">Help Center</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted">Community</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-6">
+                    <h5 class="mb-4 fs-6 text-uppercase tracking-wider">Legal</h5>
+                    <ul class="list-unstyled text-muted d-flex flex-column gap-2">
+                        <li><a href="#" class="text-decoration-none text-muted">Privacy Policy</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-top pt-4 text-center text-muted fs-7">
+                <p>&copy; 2026 Omnipaw Inc. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Scroll Reveal Animation via Intersection Observer
+        document.addEventListener('DOMContentLoaded', () => {
+            const reveals = document.querySelectorAll('.reveal');
+
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        // Optional: Stop observing once revealed
+                        // observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                root: null,
+                threshold: 0.1, // Trigger when 10% visible
+                rootMargin: "0px 0px -50px 0px"
+            });
+
+            reveals.forEach(reveal => {
+                revealObserver.observe(reveal);
+            });
+
+            // Interactive Tab Image Swapping logic
+            const audienceImg = document.getElementById('audience-img');
+            const tabs = document.querySelectorAll('button[data-bs-toggle="pill"]');
+            
+            const images = {
+                'owners-tab': 'https://placehold.co/800x600/4A3AFF/FFFFFF?text=Happy+Dog+and+Owner',
+                'sitters-tab': 'https://placehold.co/800x600/FF6B6B/FFFFFF?text=Professional+Pet+Sitter',
+                'boarding-tab': 'https://placehold.co/800x600/FFD166/1A1A2E?text=Boarding+Facility+Intake'
+            };
+
+            tabs.forEach(tab => {
+                tab.addEventListener('shown.bs.tab', function (event) {
+                    const targetId = event.target.id;
+                    if(images[targetId]) {
+                        // Small fade effect
+                        audienceImg.style.opacity = 0;
+                        setTimeout(() => {
+                            audienceImg.src = images[targetId];
+                            audienceImg.style.opacity = 1;
+                        }, 250);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
