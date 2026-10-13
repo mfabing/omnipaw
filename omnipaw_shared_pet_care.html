@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Omnipaw | Seamless Shared Pet Care</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        :root {
+            /* Custom Theme Palette */
+            --navy-bg: #070B14;
+            --navy-surface: #111A2E;
+            --teal-accent: #00E5FF;
+            --coral-accent: #FF6B6B;
+            --text-main: #F0F3F5;
+            --text-muted: #A0ABBA;
+            
+            /* Typography */
+            --font-display: 'Syne', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--navy-bg);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            cursor: none; /* Hide default cursor for custom one */
+        }
+
+        h1, h2, h3, h4, h5, h6, .display-1 {
+            font-family: var(--font-display);
+            font-weight: 800;
+        }
+
+        ::selection {
+            background-color: var(--teal-accent);
+            color: var(--navy-bg);
+        }
+
+        /* Custom Cursor */
+        .cursor-dot,
+        .cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--teal-accent);
+        }
+
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(0, 229, 255, 0.5);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+
+        /* Background Canvas */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        /* Utility Classes */
+        .text-gradient {
+            background: linear-gradient(135deg, var(--teal-accent), var(--coral-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .text-gradient-coral {
+            background: linear-gradient(135deg, var(--coral-accent), #FFA07A);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glass-card {
+            background: rgba(17, 26, 46, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(0, 229, 255, 0.1);
+            border-color: rgba(0, 229, 255, 0.2);
+        }
+
+        /* Navigation */
+        .navbar-custom {
+            background: rgba(7, 11, 20, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 20px 0;
+        }
+
+        .navbar-brand {
+            font-family: var(--font-display);
+            font-weight: 800;
+            color: var(--text-main) !important;
+            font-size: 1.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-link {
+            color: var(--text-muted) !important;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--text-main) !important;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--teal-accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Buttons */
+        .btn-custom {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--teal-accent);
+            padding: 12px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            transition: color 0.3s ease;
+        }
+
+        .btn-custom::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background: var(--teal-accent);
+            z-index: -1;
+            transition: width 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        .btn-custom:hover {
+            color: var(--navy-bg);
+            border-color: var(--teal-accent);
+        }
+
+        .btn-custom:hover::before {
+            width: 100%;
+        }
+
+        .btn-coral {
+            border-color: var(--coral-accent);
+        }
+        .btn-coral::before {
+            background: var(--coral-accent);
+        }
+        .btn-coral:hover {
+            border-color: var(--coral-accent);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding-top: 80px;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 7rem);
+            line-height: 1.1;
+            letter-spacing: -2px;
+            margin-bottom: 24px;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 40px;
+        }
+
+        /* Floating Shapes */
+        .floating-shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .shape-1 {
+            width: 300px;
+            height: 300px;
+            background: var(--teal-accent);
+            top: 20%;
+            right: 10%;
+        }
+
+        .shape-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--coral-accent);
+            bottom: -10%;
+            left: -5%;
+        }
+
+        /* Section Spacing */
+        .section-padding {
+            padding: 120px 0;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
+
+        /* Features */
+        .feature-icon-box {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            background: rgba(0, 229, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--teal-accent);
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(0, 229, 255, 0.2);
+        }
+
+        /* Audience Section */
+        .audience-card {
+            padding: 40px 30px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .audience-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        /* Footer */
+        .footer-custom {
+            background: var(--navy-surface);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding: 80px 0 40px;
+        }
+        
+        .footer-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-link:hover {
+            color: var(--teal-accent);
+        }
+
+        /* Hide elements initially for GSAP reveal */
+        .reveal-element {
+            opacity: 0;
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Interactive Background -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-outline" id="cursor-outline"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+        <div class="container">
+            <a class="navbar-brand interactive-hover" href="#">Omnipaw<span class="text-gradient">.</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" style="border: none; filter: invert(1);">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-center gap-4">
+                    <li class="nav-item"><a class="nav-link interactive-hover" href="#about">The Problem</a></li>
+                    <li class="nav-item"><a class="nav-link interactive-hover" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link interactive-hover" href="#audience">Who It's For</a></li>
+                    <li class="nav-item ms-lg-3">
+                        <a href="#start" class="btn btn-custom interactive-hover magnetic-btn">Start Tracking</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="hero">
+        <div class="floating-shape shape-1 parallax-element" data-speed="0.05"></div>
+        <div class="floating-shape shape-2 parallax-element" data-speed="-0.03"></div>
+        
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8 position-relative z-1">
+                    <div class="reveal-element hero-anim">
+                        <span class="badge rounded-pill bg-dark border border-secondary text-light px-3 py-2 mb-4">
+                            <i class="bi bi-stars text-gradient me-2"></i> The Future of Pet Care
+                        </span>
+                    </div>
+                    <h1 class="hero-title reveal-element hero-anim">
+                        Shared care, <br>
+                        <span class="text-gradient">perfectly synced.</span>
+                    </h1>
+                    <p class="hero-subtitle reveal-element hero-anim">
+                        Omnipaw is the unified digital platform designed to simplify pet care hand-offs. Keep tracking tools, health schedules, and vital documents in one place for owners, families, and sitters.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3 reveal-element hero-anim">
+                        <a href="#" class="btn btn-custom btn-coral interactive-hover magnetic-btn">Explore Features</a>
+                        <a href="#" class="btn btn-custom interactive-hover magnetic-btn" style="border-color: rgba(255,255,255,0.2);">Watch Demo</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section-padding position-relative" id="about">
+        <div class="container">
+            <div class="row align-items-center gx-lg-5">
+                <div class="col-lg-6 mb-5 mb-lg-0 reveal-element scroll-fade-up">
+                    <div class="position-relative">
+                        <div class="glass-card p-5" style="border-radius: 40px;">
+                            <i class="bi bi-arrow-left-right text-gradient-coral display-1 mb-4 d-block"></i>
+                            <h3 class="mb-4">The Hand-off Problem</h3>
+                            <p class="text-muted fs-5 mb-0">
+                                Sticky notes get lost. Text messages are forgotten. When multiple people care for a pet, crucial routines slip through the cracks. Omnipaw eliminates the chaos of shared responsibility by acting as a single source of truth for your pet's life.
+                            </p>
+                        </div>
+                        <!-- Decorative element -->
+                        <div class="position-absolute bg-primary rounded-circle" style="width: 100px; height: 100px; filter: blur(30px); bottom: -20px; right: -20px; z-index: -1;"></div>
+                    </div>
+                </div>
+                <div class="col-lg-6 reveal-element scroll-fade-left">
+                    <h2 class="section-title">Seamless <br>Transitions.</h2>
+                    <p class="text-muted fs-5 mb-5">
+                        Whether you are passing the leash to a dog sitter for the weekend, or sharing daily duties with your spouse, Omnipaw ensures everyone is on exactly the same page.
+                    </p>
+                    <ul class="list-unstyled">
+                        <li class="d-flex align-items-center mb-4">
+                            <i class="bi bi-check-circle-fill text-gradient me-3 fs-4"></i>
+                            <span class="fs-5">No more missed medications.</span>
+                        </li>
+                        <li class="d-flex align-items-center mb-4">
+                            <i class="bi bi-check-circle-fill text-gradient me-3 fs-4"></i>
+                            <span class="fs-5">Instant access to emergency vet contacts.</span>
+                        </li>
+                        <li class="d-flex align-items-center">
+                            <i class="bi bi-check-circle-fill text-gradient me-3 fs-4"></i>
+                            <span class="fs-5">Real-time feeding and walk logs.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section-padding" id="features" style="background: rgba(17, 26, 46, 0.3);">
+        <div class="container">
+            <div class="text-center mb-5 pb-4 reveal-element scroll-fade-up">
+                <h2 class="section-title">Everything in <span class="text-gradient">One Place</span></h2>
+                <p class="text-muted fs-5 mx-auto" style="max-width: 600px;">A comprehensive suite of tools built specifically for collaborative pet parenting.</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6 reveal-element feature-card-anim">
+                    <div class="glass-card p-4 p-xl-5 h-100 interactive-hover">
+                        <div class="feature-icon-box">
+                            <i class="bi bi-calendar2-check"></i>
+                        </div>
+                        <h4 class="mb-3">Health Schedules</h4>
+                        <p class="text-muted mb-0">Track vaccinations, flea/tick treatments, and set automated reminders that sync across all caregivers' devices.</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 reveal-element feature-card-anim">
+                    <div class="glass-card p-4 p-xl-5 h-100 interactive-hover">
+                        <div class="feature-icon-box" style="color: var(--coral-accent); background: rgba(255, 107, 107, 0.1); border-color: rgba(255, 107, 107, 0.2);">
+                            <i class="bi bi-folder2-open"></i>
+                        </div>
+                        <h4 class="mb-3">Document Vault</h4>
+                        <p class="text-muted mb-0">Securely store adoption papers, insurance details, and medical records. Easily generate a sharing link for boarding facilities.</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 reveal-element feature-card-anim">
+                    <div class="glass-card p-4 p-xl-5 h-100 interactive-hover">
+                        <div class="feature-icon-box" style="color: #8C52FF; background: rgba(140, 82, 255, 0.1); border-color: rgba(140, 82, 255, 0.2);">
+                            <i class="bi bi-activity"></i>
+                        </div>
+                        <h4 class="mb-3">Daily Tracking</h4>
+                        <p class="text-muted mb-0">Log meals, walks, mood, and potty breaks. View historical data to spot behavioral changes or health issues early.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Audience Section -->
+    <section class="section-padding" id="audience">
+        <div class="container">
+            <div class="row align-items-center mb-5">
+                <div class="col-md-8 reveal-element scroll-fade-up">
+                    <h2 class="section-title">Built for <span class="text-gradient-coral">Everyone</span></h2>
+                </div>
+                <div class="col-md-4 text-md-end reveal-element scroll-fade-up">
+                    <a href="#" class="btn btn-custom interactive-hover">Create Free Account</a>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3 reveal-element audience-anim">
+                    <div class="glass-card audience-card interactive-hover text-center">
+                        <i class="bi bi-house-heart display-4 text-gradient mb-3"></i>
+                        <h3>Families</h3>
+                        <p class="text-muted small">Divide and conquer chores without nagging or duplicate feedings.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 reveal-element audience-anim">
+                    <div class="glass-card audience-card interactive-hover text-center">
+                        <i class="bi bi-person-walking display-4 text-gradient-coral mb-3"></i>
+                        <h3>Sitters</h3>
+                        <p class="text-muted small">Access temporary profiles to know exactly what the pet needs, when.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 reveal-element audience-anim">
+                    <div class="glass-card audience-card interactive-hover text-center" style="border-color: rgba(140, 82, 255, 0.3);">
+                        <i class="bi bi-building display-4 mb-3" style="color: #8C52FF;"></i>
+                        <h3>Boarding</h3>
+                        <p class="text-muted small">Receive standardized digital intake forms directly from owners.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 reveal-element audience-anim">
+                    <div class="glass-card audience-card interactive-hover text-center" style="background: rgba(0, 229, 255, 0.05);">
+                        <i class="bi bi-heart-pulse display-4 text-gradient mb-3"></i>
+                        <h3>Co-Owners</h3>
+                        <p class="text-muted small">Manage expenses, schedules, and vet visits transparently across households.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer-custom">
+        <div class="container">
+            <div class="row gy-5">
+                <div class="col-lg-4">
+                    <h4 class="navbar-brand mb-4 d-inline-block">Omnipaw<span class="text-gradient">.</span></h4>
+                    <p class="text-muted mb-4 pe-lg-5">Simplifying shared pet care with intuitive digital tools. Because they deserve the best care, no matter who is holding the leash.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="btn btn-outline-secondary rounded-circle p-2 interactive-hover"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#" class="btn btn-outline-secondary rounded-circle p-2 interactive-hover"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="btn btn-outline-secondary rounded-circle p-2 interactive-hover"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4">
+                    <h5 class="mb-4 text-white">Platform</h5>
+                    <ul class="list-unstyled d-flex flex-column gap-2">
+                        <li><a href="#" class="footer-link interactive-hover">Features</a></li>
+                        <li><a href="#" class="footer-link interactive-hover">Pricing</a></li>
+                        <li><a href="#" class="footer-link interactive-hover">For Sitters</a></li>
+                        <li><a href="#" class="footer-link interactive-hover">For Boarding</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-4">
+                    <h5 class="mb-4 text-white">Resources</h5>
+                    <ul class="list-unstyled d-flex flex-column gap-2">
+                        <li><a href="#" class="footer-link interactive-hover">Help Center</a></li>
+                        <li><a href="#" class="footer-link interactive-hover">Blog</a></li>
+                        <li><a href="#" class="footer-link interactive-hover">Pet Care Guides</a></li>
+                        <li><a href="#" class="footer-link interactive-hover">API</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <h5 class="mb-4 text-white">Stay Updated</h5>
+                    <p class="text-muted small mb-3">Join our newsletter for platform updates and pet care tips.</p>
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control bg-dark border-secondary text-light interactive-hover" placeholder="Email address" aria-label="Email address">
+                        <button class="btn btn-custom" type="button" style="padding: 10px 20px;">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5 pt-4 border-top border-secondary">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="text-muted small mb-0">&copy; 2026 Omnipaw Inc. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
+                    <a href="#" class="text-muted small text-decoration-none me-3 interactive-hover">Privacy Policy</a>
+                    <a href="#" class="text-muted small text-decoration-none interactive-hover">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script>
+        // Canvas Interactive Background
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+        let mouse = { x: null, y: null, radius: 150 };
+
+        function initCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', () => {
+            initCanvas();
+            initParticles();
+        });
+
+        window.addEventListener('mousemove', (event) => {
+            mouse.x = event.x;
+            mouse.y = event.y;
+        });
+
+        window.addEventListener('mouseout', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        class Particle {
+            constructor(x, y, dx, dy, size, color) {
+                this.x = x;
+                this.y = y;
+                this.dx = dx;
+                this.dy = dy;
+                this.size = size;
+                this.color = color;
+                this.baseX = this.x;
+                this.baseY = this.y;
+                this.density = (Math.random() * 30) + 1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+
+            update() {
+                // Bounce off edges
+                if (this.x > width || this.x < 0) this.dx = -this.dx;
+                if (this.y > height || this.y < 0) this.dy = -this.dy;
+
+                // Move
+                this.x += this.dx;
+                this.y += this.dy;
+
+                // Mouse interaction
+                if (mouse.x != null && mouse.y != null) {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    let forceDirectionX = dx / distance;
+                    let forceDirectionY = dy / distance;
+                    let maxDistance = mouse.radius;
+                    let force = (maxDistance - distance) / maxDistance;
+                    let directionX = forceDirectionX * force * this.density;
+                    let directionY = forceDirectionY * force * this.density;
+
+                    if (distance < mouse.radius) {
+                        this.x -= directionX;
+                        this.y -= directionY;
+                    }
+                }
+
+                this.draw();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            let numberOfParticles = (width * height) / 15000; // Adjust density
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 2) + 0.5;
+                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                let dx = (Math.random() - 0.5) * 1;
+                let dy = (Math.random() - 0.5) * 1;
+                let color = Math.random() > 0.5 ? '#00E5FF' : '#FF6B6B'; // Teal or Coral
+                particles.push(new Particle(x, y, dx, dy, size, color));
+            }
+        }
+
+        function animateCanvas() {
+            requestAnimationFrame(animateCanvas);
+            ctx.clearRect(0, 0, innerWidth, innerHeight);
+
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+            }
+            connectParticles();
+        }
+
+        function connectParticles() {
+            let opacityValue = 1;
+            for (let a = 0; a < particles.length; a++) {
+                for (let b = a; b < particles.length; b++) {
+                    let distance = ((particles[a].x - particles[b].x) * (particles[a].x - particles[b].x))
+                                 + ((particles[a].y - particles[b].y) * (particles[a].y - particles[b].y));
+                    if (distance < (width/10) * (height/10)) {
+                        opacityValue = 1 - (distance / 20000);
+                        ctx.strokeStyle = `rgba(0, 229, 255, ${opacityValue * 0.2})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[a].x, particles[a].y);
+                        ctx.lineTo(particles[b].x, particles[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        // Initialize Canvas
+        initCanvas();
+        initParticles();
+        animateCanvas();
+
+        // Custom Cursor Logic
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorOutline = document.getElementById('cursor-outline');
+        
+        let cursorX = window.innerWidth / 2;
+        let cursorY = window.innerHeight / 2;
+        let outlineX = cursorX;
+        let outlineY = cursorY;
+
+        window.addEventListener('mousemove', (e) => {
+            cursorX = e.clientX;
+            cursorY = e.clientY;
+            
+            // Instantly move the dot
+            cursorDot.style.left = `${cursorX}px`;
+            cursorDot.style.top = `${cursorY}px`;
+        });
+
+        // Smooth follower animation for the outline using requestAnimationFrame
+        function animateCursor() {
+            let distX = cursorX - outlineX;
+            let distY = cursorY - outlineY;
+            
+            outlineX += distX * 0.15; // easing
+            outlineY += distY * 0.15;
+            
+            cursorOutline.style.left = `${outlineX}px`;
+            cursorOutline.style.top = `${outlineY}px`;
+            
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Cursor hover states
+        const interactiveElements = document.querySelectorAll('.interactive-hover');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursorOutline.style.width = '60px';
+                cursorOutline.style.height = '60px';
+                cursorOutline.style.backgroundColor = 'rgba(0, 229, 255, 0.1)';
+                cursorDot.style.transform = 'translate(-50%, -50%) scale(1.5)';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursorOutline.style.width = '40px';
+                cursorOutline.style.height = '40px';
+                cursorOutline.style.backgroundColor = 'transparent';
+                cursorDot.style.transform = 'translate(-50%, -50%) scale(1)';
+            });
+        });
+
+        // GSAP Registration
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Make elements visible right before animation to avoid FOUC
+        gsap.set(".reveal-element", { autoAlpha: 1 });
+
+        // Hero Animations
+        const heroTl = gsap.timeline();
+        heroTl.from(".hero-anim", {
+            y: 50,
+            opacity: 0,
+            duration: 1,
+            stagger: 0.2,
+            ease: "power4.out",
+            delay: 0.2
+        });
+
+        // Parallax Floating Shapes (Mouse Move)
+        document.addEventListener("mousemove", (e) => {
+            const x = (e.clientX - window.innerWidth / 2);
+            const y = (e.clientY - window.innerHeight / 2);
+
+            gsap.utils.toArray('.parallax-element').forEach(layer => {
+                const speed = layer.getAttribute('data-speed');
+                gsap.to(layer, {
+                    x: x * speed,
+                    y: y * speed,
+                    duration: 1,
+                    ease: "power1.out"
+                });
+            });
+        });
+
+        // Scroll Animations: About Section (Fade Up)
+        gsap.utils.toArray('.scroll-fade-up').forEach(elem => {
+            gsap.from(elem, {
+                scrollTrigger: {
+                    trigger: elem,
+                    start: "top 85%",
+                    toggleActions: "play none none reverse"
+                },
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                ease: "power3.out"
+            });
+        });
+
+        // Scroll Animations: About Section (Fade Left)
+        gsap.utils.toArray('.scroll-fade-left').forEach(elem => {
+            gsap.from(elem, {
+                scrollTrigger: {
+                    trigger: elem,
+                    start: "top 80%",
+                    toggleActions: "play none none reverse"
+                },
+                x: 50,
+                opacity: 0,
+                duration: 1,
+                ease: "power3.out"
+            });
+        });
+
+        // Scroll Animations: Features Stagger
+        gsap.from(".feature-card-anim", {
+            scrollTrigger: {
+                trigger: "#features",
+                start: "top 70%",
+            },
+            y: 60,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.2,
+            ease: "back.out(1.2)"
+        });
+
+        // Scroll Animations: Audience Stagger
+        gsap.from(".audience-anim", {
+            scrollTrigger: {
+                trigger: "#audience",
+                start: "top 75%",
+            },
+            y: 40,
+            opacity: 0,
+            scale: 0.95,
+            duration: 0.6,
+            stagger: 0.15,
+            ease: "power2.out"
+        });
+
+        // Magnetic Button Effect
+        const magneticBtns = document.querySelectorAll('.magnetic-btn');
+        magneticBtns.forEach(btn => {
+            btn.addEventListener('mousemove', function(e) {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                
+                gsap.to(btn, {
+                    x: x * 0.3,
+                    y: y * 0.3,
+                    duration: 0.5,
+                    ease: "power2.out"
+                });
+            });
+
+            btn.addEventListener('mouseleave', function() {
+                gsap.to(btn, {
+                    x: 0,
+                    y: 0,
+                    duration: 0.7,
+                    ease: "elastic.out(1, 0.3)"
+                });
+            });
+        });
+
+    </script>
+</body>
+</html>
