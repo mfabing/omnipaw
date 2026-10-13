@@ -1,0 +1,671 @@
+Here is the HTML/CSS code for an interactive, award-winning style website about the OmniPaw pet care platform. It uses Bootstrap 5 for layout and Lucide for icons, with a custom theme for a modern, cohesive look.
+```html
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OmniPaw · shared pet care, unified</title>
+  <!-- Bootstrap 5 (fallback & base) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Lucide icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Font (Inter) for a modern awwwards feel -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&display=swap" rel="stylesheet">
+  <style>
+    /* ----- CUSTOM THEME (overrides + extended look) ----- */
+    :root {
+      --op-primary: #3b2b5c;        /* deep lavender/plum */
+      --op-primary-soft: #6a5a8c;
+      --op-accent: #ffb347;         /* warm amber */
+      --op-accent-soft: #ffd966;
+      --op-success: #6fcf97;
+      --op-bg-light: #f9f7fe;
+      --op-bg-paper: #ffffff;
+      --op-text-dark: #1e1a2b;
+      --op-text-muted: #5e5270;
+      --op-border-light: rgba(59, 43, 92, 0.1);
+      --op-shadow-sm: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+      --op-shadow-md: 0 20px 35px -8px rgba(59, 43, 92, 0.12);
+      --op-radius-xl: 2.5rem;
+      --op-radius-lg: 2rem;
+      --op-radius-md: 1.5rem;
+      --op-radius-pill: 60px;
+      --op-transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--op-bg-light);
+      color: var(--op-text-dark);
+      overflow-x: hidden;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Bootstrap overrides using standard classes but new colors */
+    .bg-primary { background-color: var(--op-primary) !important; }
+    .bg-accent { background-color: var(--op-accent) !important; }
+    .text-primary { color: var(--op-primary) !important; }
+    .text-accent { color: var(--op-accent) !important; }
+    .btn-primary {
+      background-color: var(--op-primary);
+      border-color: var(--op-primary);
+      color: white;
+      padding: 0.75rem 1.75rem;
+      font-weight: 600;
+      border-radius: var(--op-radius-pill);
+      transition: var(--op-transition);
+      box-shadow: 0 6px 14px rgba(59, 43, 92, 0.15);
+    }
+    .btn-primary:hover, .btn-primary:focus {
+      background-color: #2d1f47;
+      border-color: #2d1f47;
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 12px 24px rgba(59, 43, 92, 0.25);
+    }
+    .btn-outline-primary {
+      border-color: var(--op-primary);
+      color: var(--op-primary);
+      border-radius: var(--op-radius-pill);
+      font-weight: 500;
+      padding: 0.7rem 1.8rem;
+      transition: var(--op-transition);
+    }
+    .btn-outline-primary:hover {
+      background-color: var(--op-primary);
+      border-color: var(--op-primary);
+      color: white;
+      transform: scale(1.02);
+    }
+    .btn-lg {
+      padding: 0.9rem 2.2rem;
+      font-size: 1.1rem;
+    }
+
+    /* custom cards */
+    .card-op {
+      background: var(--op-bg-paper);
+      border: 1px solid var(--op-border-light);
+      border-radius: var(--op-radius-lg);
+      padding: 1.75rem;
+      transition: var(--op-transition);
+      box-shadow: var(--op-shadow-sm);
+      height: 100%;
+    }
+    .card-op:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--op-shadow-md);
+      border-color: rgba(255, 180, 71, 0.3);
+    }
+
+    .section-padding {
+      padding: 6rem 0;
+    }
+
+    /* micro-animations & interactive bits */
+    .hover-lift {
+      transition: var(--op-transition);
+    }
+    .hover-lift:hover {
+      transform: translateY(-6px);
+    }
+
+    .paw-icon {
+      color: var(--op-accent);
+      width: 48px;
+      height: 48px;
+      stroke-width: 1.5;
+    }
+
+    /* nav */
+    .navbar-op {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border-bottom: 1px solid var(--op-border-light);
+      transition: var(--op-transition);
+      padding: 1rem 0;
+    }
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.8rem;
+      letter-spacing: -0.02em;
+      color: var(--op-primary);
+    }
+    .navbar-brand span {
+      color: var(--op-accent);
+    }
+    .nav-link {
+      font-weight: 500;
+      color: var(--op-text-dark);
+      margin: 0 0.5rem;
+      position: relative;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0%;
+      height: 3px;
+      background: var(--op-accent);
+      transition: var(--op-transition);
+      border-radius: 3px;
+    }
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    /* hero */
+    .hero-section {
+      padding: 8rem 0 5rem;
+      background: radial-gradient(circle at 80% 20%, rgba(255, 180, 71, 0.1) 0%, transparent 50%);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-float {
+      animation: float 5s ease-in-out infinite;
+    }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .paw-badge {
+      background: var(--op-accent-soft);
+      color: #3b2b5c;
+      font-weight: 600;
+      padding: 0.5rem 1.2rem;
+      border-radius: var(--op-radius-pill);
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* feature icons container */
+    .feature-icon-wrapper {
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(145deg, #f0ebf9, #ffffff);
+      border-radius: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 8px 16px -8px rgba(59, 43, 92, 0.15);
+      transition: var(--op-transition);
+    }
+    .card-op:hover .feature-icon-wrapper {
+      transform: scale(1.1) rotate(4deg);
+      background: var(--op-accent-soft);
+    }
+
+    /* testimonials / slider-ish */
+    .testimonial-card {
+      background: white;
+      border-radius: var(--op-radius-lg);
+      padding: 2rem;
+      border-left: 6px solid var(--op-accent);
+      box-shadow: var(--op-shadow-sm);
+      height: 100%;
+    }
+
+    /* stats */
+    .stat-number {
+      font-size: 3.2rem;
+      font-weight: 700;
+      color: var(--op-primary);
+      line-height: 1.2;
+    }
+
+    /* footer */
+    .footer-op {
+      background: var(--op-primary);
+      color: rgba(255,255,255,0.85);
+      padding: 4rem 0 2rem;
+      border-radius: var(--op-radius-xl) var(--op-radius-xl) 0 0;
+      margin-top: 4rem;
+    }
+    .footer-op a {
+      color: var(--op-accent-soft);
+      text-decoration: none;
+      transition: var(--op-transition);
+    }
+    .footer-op a:hover {
+      color: white;
+      transform: translateX(4px);
+    }
+
+    /* interactive cursor tooltip (tiny) */
+    [data-tooltip] {
+      position: relative;
+      cursor: help;
+    }
+    [data-tooltip]:before {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 130%;
+      left: 50%;
+      transform: translateX(-50%) scale(0.85);
+      background: var(--op-primary);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: var(--op-transition);
+      font-weight: 500;
+      box-shadow: var(--op-shadow-md);
+    }
+    [data-tooltip]:hover:before {
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
+    }
+
+    /* Scroll reveal sim (just using animation on load) */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: revealAnim 0.8s cubic-bezier(0.2, 0.9, 0.4, 1) forwards;
+    }
+    @keyframes revealAnim {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+
+    /* Custom list style */
+    .list-check {
+      list-style: none;
+      padding-left: 0;
+    }
+    .list-check li {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      font-weight: 500;
+    }
+    .list-check li i {
+      color: var(--op-accent);
+      width: 20px;
+      height: 20px;
+    }
+
+    /* responsive tweaks */
+    @media (max-width: 768px) {
+      .section-padding { padding: 3.5rem 0; }
+      .hero-section { padding: 5rem 0 3rem; }
+      .stat-number { font-size: 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-op fixed-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+        <i data-lucide="paw-print" style="width: 32px; height: 32px; color: var(--op-accent);"></i>
+        Omni<span>Paw</span>
+      </a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+          <li class="nav-item"><a class="nav-link" href="#how">How it works</a></li>
+          <li class="nav-item"><a class="nav-link" href="#testimonials">Stories</a></li>
+        </ul>
+        <div class="d-flex gap-2 mt-3 mt-lg-0">
+          <a href="#" class="btn btn-outline-primary" data-tooltip="Sign in to your pack">Log in</a>
+          <a href="#" class="btn btn-primary" data-tooltip="Start free, no credit card">Get started</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <div class="container position-relative">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-6">
+          <div class="paw-badge mb-4 reveal">
+            <i data-lucide="sparkles" style="width: 16px; height: 16px;"></i> Unified pet care, zero chaos
+          </div>
+          <h1 class="display-3 fw-bold mb-4 reveal delay-1" style="letter-spacing: -0.03em; line-height: 1.1;">
+            Every paw,<br>one <span style="color: var(--op-accent);">rhythm</span>.
+          </h1>
+          <p class="lead mb-5 reveal delay-2" style="color: var(--op-text-muted); max-width: 500px;">
+            OmniPaw keeps trackers, health schedules, and documents in one shared space — so families, sitters, and boarding facilities stay perfectly in sync.
+          </p>
+          <div class="d-flex flex-wrap gap-3 reveal delay-3">
+            <a href="#" class="btn btn-primary btn-lg d-flex align-items-center gap-2">
+              <i data-lucide="rocket" style="width: 18px; height: 18px;"></i> Start free
+            </a>
+            <a href="#" class="btn btn-outline-primary btn-lg d-flex align-items-center gap-2">
+              <i data-lucide="play-circle" style="width: 18px; height: 18px;"></i> Watch demo
+            </a>
+          </div>
+          <div class="d-flex align-items-center gap-4 mt-5 reveal delay-3">
+            <div class="d-flex">
+              <img src="https://i.pravatar.cc/100?img=32" class="rounded-circle border border-2 border-white" width="44" height="44" alt="user">
+              <img src="https://i.pravatar.cc/100?img=12" class="rounded-circle border border-2 border-white" width="44" height="44" style="margin-left: -12px;" alt="user">
+              <img src="https://i.pravatar.cc/100?img=45" class="rounded-circle border border-2 border-white" width="44" height="44" style="margin-left: -12px;" alt="user">
+            </div>
+            <p class="small fw-semibold mb-0" style="color: var(--op-text-muted);">Joined by 8,000+ pet families</p>
+          </div>
+        </div>
+        <div class="col-lg-6 position-relative">
+          <div class="hero-float">
+            <div class="bg-white p-5 rounded-5 shadow-lg position-relative" style="border-radius: var(--op-radius-xl) !important;">
+              <div class="d-flex justify-content-between align-items-start mb-4">
+                <div>
+                  <span class="badge bg-accent text-dark px-3 py-2 rounded-pill mb-2">TODAY</span>
+                  <h3 class="h4 fw-bold mb-0">Luna's schedule</h3>
+                </div>
+                <i data-lucide="dog" style="width: 40px; height: 40px; color: var(--op-primary);"></i>
+              </div>
+              <div class="d-flex flex-column gap-3">
+                <div class="d-flex align-items-center gap-3 p-3 rounded-4" style="background: #f3effa;">
+                  <i data-lucide="pill" style="width: 22px; height: 22px; color: var(--op-primary);"></i>
+                  <span class="fw-semibold">Heartworm meds</span>
+                  <span class="ms-auto badge bg-primary text-white px-3 py-2">8:00 AM</span>
+                </div>
+                <div class="d-flex align-items-center gap-3 p-3 rounded-4" style="background: #f3effa;">
+                  <i data-lucide="utensils" style="width: 22px; height: 22px; color: var(--op-primary);"></i>
+                  <span class="fw-semibold">Breakfast (1 cup)</span>
+                  <span class="ms-auto badge bg-success text-white px-3 py-2">Done</span>
+                </div>
+                <div class="d-flex align-items-center gap-3 p-3 rounded-4" style="background: #f3effa;">
+                  <i data-lucide="footprints" style="width: 22px; height: 22px; color: var(--op-primary);"></i>
+                  <span class="fw-semibold">Evening walk</span>
+                  <span class="ms-auto badge bg-warning text-dark px-3 py-2">6:30 PM</span>
+                </div>
+              </div>
+              <div class="mt-4 d-flex justify-content-between">
+                <span class="text-muted small"><i data-lucide="users" class="me-1" style="width: 16px;"></i> Shared with 3 caregivers</span>
+                <i data-lucide="check-circle" style="color: var(--op-success);"></i>
+              </div>
+            </div>
+          </div>
+          <!-- decorative blobs -->
+          <div class="position-absolute top-0 end-0 bg-accent rounded-circle" style="width: 120px; height: 120px; filter: blur(60px); opacity: 0.25; z-index: -1;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOGO / TRUST STRIP -->
+  <div class="container py-5">
+    <div class="row justify-content-center text-center">
+      <div class="col-12">
+        <p class="text-uppercase small fw-semibold tracking-wide mb-4" style="color: var(--op-text-muted); letter-spacing: 0.1em;">Trusted by modern pet parents & facilities</p>
+      </div>
+      <div class="col-12 d-flex flex-wrap justify-content-center align-items-center gap-5 opacity-50">
+        <i data-lucide="dog" style="width: 40px; height: 40px;"></i>
+        <i data-lucide="cat" style="width: 40px; height: 40px;"></i>
+        <i data-lucide="bird" style="width: 40px; height: 40px;"></i>
+        <i data-lucide="rabbit" style="width: 40px; height: 40px;"></i>
+        <i data-lucide="paw-print" style="width: 40px; height: 40px;"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES SECTION -->
+  <section id="features" class="section-padding">
+    <div class="container">
+      <div class="row mb-5">
+        <div class="col-lg-7">
+          <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill mb-3 fw-semibold">Everything in one place</span>
+          <h2 class="display-5 fw-bold mb-3" style="letter-spacing: -0.02em;">Care that stays <span style="color: var(--op-accent);">in sync</span>.</h2>
+          <p class="lead" style="color: var(--op-text-muted);">No more lost notes, forgotten meds, or messy group chats. OmniPaw gives every caregiver the same real-time picture.</p>
+        </div>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-3">
+          <div class="card-op text-start h-100">
+            <div class="feature-icon-wrapper">
+              <i data-lucide="activity" style="width: 32px; height: 32px; color: var(--op-primary);"></i>
+            </div>
+            <h4 class="h5 fw-bold mb-3">Health schedules</h4>
+            <p class="text-muted small mb-0">Vaccines, meds, vet visits — auto-reminders for everyone.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="card-op text-start h-100">
+            <div class="feature-icon-wrapper">
+              <i data-lucide="file-text" style="width: 32px; height: 32px; color: var(--op-primary);"></i>
+            </div>
+            <h4 class="h5 fw-bold mb-3">Document vault</h4>
+            <p class="text-muted small mb-0">Store records, prescriptions, and insurance in one secure place.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="card-op text-start h-100">
+            <div class="feature-icon-wrapper">
+              <i data-lucide="users" style="width: 32px; height: 32px; color: var(--op-primary);"></i>
+            </div>
+            <h4 class="h5 fw-bold mb-3">Seamless handoff</h4>
+            <p class="text-muted small mb-0">Assign tasks, leave notes, and confirm care — no gaps.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="card-op text-start h-100">
+            <div class="feature-icon-wrapper">
+              <i data-lucide="bell-ring" style="width: 32px; height: 32px; color: var(--op-primary);"></i>
+            </div>
+            <h4 class="h5 fw-bold mb-3">Smart alerts</h4>
+            <p class="text-muted small mb-0">Get pinged for meals, walks, or meds only when it matters.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS / INTERACTIVE STEPS -->
+  <section id="how" class="section-padding" style="background: linear-gradient(180deg, #ffffff 0%, #f9f7fe 100%);">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-6 order-lg-2">
+          <div class="d-flex flex-column gap-4">
+            <div class="d-flex gap-4 align-items-start hover-lift p-3 rounded-4" style="background: white; box-shadow: var(--op-shadow-sm);">
+              <div class="bg-primary bg-opacity-10 p-3 rounded-4"><span class="fw-bold fs-3" style="color: var(--op-primary);">1</span></div>
+              <div><h5 class="fw-bold">Create your pet profile</h5><p class="text-muted mb-0">Add routines, meds, and documents in minutes.</p></div>
+            </div>
+            <div class="d-flex gap-4 align-items-start hover-lift p-3 rounded-4" style="background: white; box-shadow: var(--op-shadow-sm);">
+              <div class="bg-primary bg-opacity-10 p-3 rounded-4"><span class="fw-bold fs-3" style="color: var(--op-primary);">2</span></div>
+              <div><h5 class="fw-bold">Invite your care circle</h5><p class="text-muted mb-0">Family, sitters, boarding — everyone gets access.</p></div>
+            </div>
+            <div class="d-flex gap-4 align-items-start hover-lift p-3 rounded-4" style="background: white; box-shadow: var(--op-shadow-sm);">
+              <div class="bg-primary bg-opacity-10 p-3 rounded-4"><span class="fw-bold fs-3" style="color: var(--op-primary);">3</span></div>
+              <div><h5 class="fw-bold">Track & hand off with ease</h5><p class="text-muted mb-0">Real-time updates, so nothing falls through.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 order-lg-1">
+          <div class="pe-lg-5">
+            <span class="badge bg-accent text-dark px-3 py-2 rounded-pill mb-3 fw-semibold">How it works</span>
+            <h2 class="display-5 fw-bold mb-4" style="letter-spacing: -0.02em;">From chaos to calm,<br>in three taps.</h2>
+            <ul class="list-check mt-4">
+              <li><i data-lucide="check-circle-2"></i> No more “did you feed the dog?”</li>
+              <li><i data-lucide="check-circle-2"></i> Every caregiver sees the same schedule</li>
+              <li><i data-lucide="check-circle-2"></i> Documents never get lost in email</li>
+            </ul>
+            <a href="#" class="btn btn-primary mt-4 d-inline-flex align-items-center gap-2">Try OmniPaw free <i data-lucide="arrow-right" style="width: 18px;"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials" class="section-padding">
+    <div class="container">
+      <div class="row mb-5 text-center">
+        <div class="col-lg-8 mx-auto">
+          <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill mb-3 fw-semibold">Pawsitive stories</span>
+          <h2 class="display-5 fw-bold">Loved by pet people</h2>
+        </div>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="testimonial-card h-100">
+            <div class="d-flex gap-1 text-warning mb-3">
+              <i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i>
+            </div>
+            <p class="mb-4 fst-italic">“OmniPaw completely removed the stress of sharing care between my ex and me. We both see Luna’s schedule, no arguments.”</p>
+            <div class="d-flex align-items-center gap-3">
+              <img src="https://i.pravatar.cc/100?img=25" class="rounded-circle" width="48" height="48" alt="avatar">
+              <div><h6 class="fw-bold mb-0">Mia Chen</h6><small class="text-muted">Pet parent to Luna</small></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="testimonial-card h-100">
+            <div class="d-flex gap-1 text-warning mb-3">
+              <i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i>
+            </div>
+            <p class="mb-4 fst-italic">“As a boarding facility, OmniPaw gives us instant access to each pet’s routine and meds. Game changer.”</p>
+            <div class="d-flex align-items-center gap-3">
+              <img src="https://i.pravatar.cc/100?img=8" class="rounded-circle" width="48" height="48" alt="avatar">
+              <div><h6 class="fw-bold mb-0">Carlos Mendez</h6><small class="text-muted">Happy Tails Boarding</small></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="testimonial-card h-100">
+            <div class="d-flex gap-1 text-warning mb-3">
+              <i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i><i data-lucide="star" fill="currentColor"></i>
+            </div>
+            <p class="mb-4 fst-italic">“I pet-sit for multiple families. OmniPaw keeps every instruction and document right on my phone. I never miss a beat.”</p>
+            <div class="d-flex align-items-center gap-3">
+              <img src="https://i.pravatar.cc/100?img=44" class="rounded-circle" width="48" height="48" alt="avatar">
+              <div><h6 class="fw-bold mb-0">Jordan Lee</h6><small class="text-muted">Professional sitter</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS / MICRO-INTERACTION -->
+  <div class="container py-4">
+    <div class="row g-4 text-center bg-white p-5 rounded-5 shadow-sm" style="border: 1px solid var(--op-border-light);">
+      <div class="col-6 col-md-3">
+        <div class="stat-number">12k+</div>
+        <p class="text-muted fw-semibold mb-0">Active pets</p>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-number">98%</div>
+        <p class="text-muted fw-semibold mb-0">Care consistency</p>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-number">30k</div>
+        <p class="text-muted fw-semibold mb-0">Tasks completed</p>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-number">4.9</div>
+        <p class="text-muted fw-semibold mb-0">App rating</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL CTA -->
+  <section class="section-padding">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+          <div class="bg-primary p-5 rounded-5 position-relative overflow-hidden">
+            <div class="position-absolute top-0 start-0 w-100 h-100 opacity-10" style="background: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><path fill=%22%23ffb347%22 d=%22M50 15 L55 35 L75 35 L60 50 L70 70 L50 60 L30 70 L40 50 L25 35 L45 35 Z%22/></svg>') repeat; background-size: 60px;"></div>
+            <h2 class="display-5 fw-bold text-white mb-3 position-relative">Ready to simplify pet care?</h2>
+            <p class="lead text-white-50 mb-4 position-relative">Join thousands of families and sitters who’ve found their flow.</p>
+            <a href="#" class="btn btn-light btn-lg text-primary fw-bold px-5 py-3 position-relative rounded-pill">Get started — it’s free</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer-op">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <a class="navbar-brand d-flex align-items-center gap-2 text-white mb-3" href="#">
+            <i data-lucide="paw-print" style="width: 32px; height: 32px; color: var(--op-accent);"></i>
+            <span class="fs-3 fw-bold">OmniPaw</span>
+          </a>
+          <p class="small pe-lg-5">Unified pet care for modern families, sitters, and boarding facilities.</p>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h6 class="fw-bold mb-3 text-white">Product</h6>
+          <ul class="list-unstyled small d-flex flex-column gap-2">
+            <li><a href="#" class="text-white-50">Features</a></li>
+            <li><a href="#" class="text-white-50">Pricing</a></li>
+            <li><a href="#" class="text-white-50">Demo</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h6 class="fw-bold mb-3 text-white">Company</h6>
+          <ul class="list-unstyled small d-flex flex-column gap-2">
+            <li><a href="#" class="text-white-50">About</a></li>
+            <li><a href="#" class="text-white-50">Blog</a></li>
+            <li><a href="#" class="text-white-50">Careers</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-4">
+          <h6 class="fw-bold mb-3 text-white">Stay in the loop</h6>
+          <div class="d-flex gap-2">
+            <input type="email" class="form-control rounded-pill border-0 py-2" placeholder="Your email">
+            <button class="btn btn-accent rounded-pill px-4" style="background: var(--op-accent); color: #1e1a2b; font-weight: 600;">Join</button>
+          </div>
+        </div>
+      </div>
+      <hr class="mt-5 opacity-25">
+      <div class="d-flex flex-wrap justify-content-between align-items-center small">
+        <span>© 2025 OmniPaw. All paws reserved.</span>
+        <div class="d-flex gap-3">
+          <a href="#" class="text-white-50">Privacy</a>
+          <a href="#" class="text-white-50">Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS (for toggler) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Initialize Lucide icons -->
+  <script>
+    lucide.createIcons();
+    
+    // tiny micro-interaction: add a subtle scale to buttons on mouse move (optional extra flair)
+    document.querySelectorAll('.btn').forEach(btn => {
+      btn.addEventListener('mouseenter', (e) => {
+        e.currentTarget.style.transform = 'scale(1.02)';
+      });
+      btn.addEventListener('mouseleave', (e) => {
+        e.currentTarget.style.transform = 'scale(1)';
+      });
+    });
+
+    // simulate reveal on scroll (quick fix: all reveals already animated via css, but add class to elements on scroll for a bit more)
+    // for simplicity, we just rely on the load animation. But we can also add some for sections.
+    // no extra needed for awwwards feel.
+  </script>
+</body>
+</html>
+```
