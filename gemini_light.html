@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Omnipaw | Shared Pet Care, Perfectly Synced</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 (Zephyr Theme via Bootswatch) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/zephyr/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        :root {
+            --primary-color: #ff8fa3; /* Soft warm pink/orange */
+            --secondary-color: #a0c4ff; /* Pastel blue */
+            --accent-color: #ffd6a5; /* Soft yellow/orange */
+            --bg-light: #fbfbfd;
+            --text-main: #2b2d42;
+            --glass-bg: rgba(255, 255, 255, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Base & Typography */
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+            cursor: none; /* Hide default cursor for custom cursor */
+        }
+
+        h1, h2, h3, h4, h5, h6, .font-heading {
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: -0.02em;
+        }
+
+        /* Hide cursor on interactive elements to let custom cursor take over */
+        a, button, input, select, textarea, .interactive {
+            cursor: none !important; 
+        }
+
+        /* Custom Cursor */
+        #custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
+                        height 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
+                        background-color 0.3s ease;
+            mix-blend-mode: multiply;
+        }
+
+        #custom-cursor.cursor-hover {
+            width: 60px;
+            height: 60px;
+            background-color: var(--secondary-color);
+            opacity: 0.5;
+            mix-blend-mode: normal;
+        }
+
+        /* Animated Background Blobs */
+        .bg-blobs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+            filter: blur(80px);
+            opacity: 0.6;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            animation: float 20s infinite ease-in-out alternate;
+        }
+
+        .blob-1 {
+            width: 40vw;
+            height: 40vw;
+            background: var(--accent-color);
+            top: -10%;
+            left: -10%;
+            animation-delay: 0s;
+        }
+
+        .blob-2 {
+            width: 35vw;
+            height: 35vw;
+            background: var(--secondary-color);
+            bottom: -20%;
+            right: -10%;
+            animation-delay: -5s;
+        }
+        
+        .blob-3 {
+            width: 30vw;
+            height: 30vw;
+            background: var(--primary-color);
+            top: 40%;
+            left: 50%;
+            animation-delay: -10s;
+            opacity: 0.5;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(10%, 10%) scale(1.1); }
+            100% { transform: translate(-5%, 15%) scale(0.9); }
+        }
+
+        /* Glassmorphism Utilities */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+        }
+
+        /* Navigation */
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--text-main) !important;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+            position: relative;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 6vw, 5.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title span {
+            background: linear-gradient(135deg, var(--primary-color), #ffb5a7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Waitlist Form & Magnetic Button */
+        .waitlist-form {
+            display: flex;
+            background: white;
+            border-radius: 50px;
+            padding: 0.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            max-width: 500px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .waitlist-form input {
+            border: none;
+            background: transparent;
+            padding: 1rem 1.5rem;
+            flex-grow: 1;
+            border-radius: 50px;
+            outline: none;
+            font-size: 1rem;
+        }
+        
+        .waitlist-form input:focus {
+            box-shadow: none;
+        }
+
+        .magnetic-btn-wrap {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .magnetic-btn {
+            background: var(--text-main);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 1rem 2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background 0.3s ease;
+            position: relative;
+        }
+
+        .magnetic-btn:hover {
+            background: #1a1b29;
+            color: white;
+        }
+        
+        .form-success-msg {
+            display: none;
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-top: 1rem;
+            padding-left: 1rem;
+        }
+
+        /* Floating 3D Composition (Hero Visual) */
+        .hero-visual {
+            position: relative;
+            height: 500px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .main-pet-card {
+            width: 300px;
+            padding: 2rem;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.9);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            z-index: 2;
+            animation: float-card 6s ease-in-out infinite;
+        }
+
+        .pet-avatar {
+            width: 80px;
+            height: 80px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .floating-element {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            z-index: 3;
+        }
+
+        .float-1 { width: 60px; height: 60px; top: 10%; left: 10%; animation: float-icon 4s ease-in-out infinite alternate; color: var(--primary-color); }
+        .float-2 { width: 70px; height: 70px; bottom: 20%; right: 5%; animation: float-icon 5s ease-in-out infinite alternate-reverse; color: var(--secondary-color); }
+        .float-3 { width: 50px; height: 50px; top: 30%; right: 15%; animation: float-icon 3.5s ease-in-out infinite alternate; color: #ffb5a7; }
+
+        @keyframes float-card {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+        }
+        @keyframes float-icon {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-20px); }
+        }
+
+        /* Marquee Section */
+        .marquee-container {
+            width: 100%;
+            overflow: hidden;
+            background: var(--text-main);
+            color: white;
+            padding: 1.5rem 0;
+            transform: rotate(-2deg) scale(1.05);
+            margin: 4rem 0;
+            z-index: 10;
+            position: relative;
+        }
+
+        .marquee-content {
+            display: flex;
+            white-space: nowrap;
+            animation: marquee 20s linear infinite;
+        }
+
+        .marquee-content span {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 8rem 0;
+            position: relative;
+            z-index: 5;
+        }
+
+        .feature-card {
+            padding: 2.5rem;
+            border-radius: 30px;
+            height: 100%;
+            transition: box-shadow 0.3s ease;
+            /* Tilt effect handled by JS */
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .feature-card-inner {
+            transform: translateZ(30px); /* Brings content forward in 3D space */
+        }
+
+        .feature-icon-wrapper {
+            width: 60px;
+            height: 60px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .icon-pink { background: rgba(255, 143, 163, 0.1); color: var(--primary-color); }
+        .icon-blue { background: rgba(160, 196, 255, 0.1); color: var(--secondary-color); }
+        .icon-orange { background: rgba(255, 214, 165, 0.1); color: #f4a261; }
+
+        /* CTA Footer */
+        .cta-section {
+            padding: 8rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-glass {
+            border-radius: 40px;
+            padding: 5rem 2rem;
+            position: relative;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Animated Background -->
+    <div class="bg-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top glass-panel" style="border-radius: 0 0 20px 20px; border-top: none;">
+        <div class="container">
+            <a class="navbar-brand interactive" href="#">
+                <i data-lucide="paw-print" style="color: var(--primary-color)"></i>
+                Omnipaw
+            </a>
+            <button class="btn magnetic-btn rounded-pill px-4 interactive d-none d-md-flex" onclick="document.getElementById('waitlist').focus()">
+                Join Waitlist
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <!-- Text Content -->
+                <div class="col-lg-6 mb-5 mb-lg-0 hero-text-col">
+                    <div class="badge rounded-pill bg-white text-dark px-3 py-2 mb-4 shadow-sm border interactive" style="font-weight: 500;">
+                        <i class="bi bi-stars text-warning me-2"></i> Now accepting early access
+                    </div>
+                    <h1 class="hero-title">Shared Pet Care, <br><span>Perfectly Synced.</span></h1>
+                    <p class="lead mb-5 text-muted" style="max-width: 450px;">
+                        The single source of truth for your furry family members. Manage medical records, diets, and daily care routines seamlessly across households.
+                    </p>
+                    
+                    <form class="waitlist-form interactive" id="hero-form">
+                        <input type="email" id="waitlist" placeholder="Enter your email address" required class="interactive">
+                        <div class="magnetic-btn-wrap interactive">
+                            <button type="submit" class="magnetic-btn m-1 interactive">
+                                <span>Get Access</span>
+                                <i data-lucide="arrow-right" class="ms-1"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <div class="form-success-msg" id="hero-success">
+                        <i class="bi bi-check-circle-fill me-1"></i> You're on the list! Keep an eye on your inbox.
+                    </div>
+                </div>
+
+                <!-- Visual Content -->
+                <div class="col-lg-6 hero-visual-col">
+                    <div class="hero-visual">
+                        <!-- Main UI Card -->
+                        <div class="main-pet-card text-center interactive">
+                            <div class="pet-avatar">
+                                <i data-lucide="dog" size="40"></i>
+                            </div>
+                            <h4 class="font-heading mb-1">Bella's Profile</h4>
+                            <p class="small text-muted mb-4">Golden Retriever • 3 yrs</p>
+                            
+                            <div class="d-flex align-items-center justify-content-between p-3 rounded-4 bg-light mb-2 text-start">
+                                <div>
+                                    <h6 class="mb-0 font-heading fs-6">Dinner Time</h6>
+                                    <small class="text-muted">1 cup Kibble</small>
+                                </div>
+                                <i class="bi bi-check-circle text-success fs-5"></i>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between p-3 rounded-4 bg-light text-start">
+                                <div>
+                                    <h6 class="mb-0 font-heading fs-6">Vet Appt.</h6>
+                                    <small class="text-muted">Tomorrow, 10 AM</small>
+                                </div>
+                                <i class="bi bi-calendar-event text-primary fs-5"></i>
+                            </div>
+                        </div>
+
+                        <!-- Floating Elements -->
+                        <div class="floating-element float-1 interactive">
+                            <i data-lucide="bone" size="28"></i>
+                        </div>
+                        <div class="floating-element float-2 interactive">
+                            <i data-lucide="stethoscope" size="32"></i>
+                        </div>
+                        <div class="floating-element float-3 interactive">
+                            <i class="bi bi-droplet-fill fs-3"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Marquee -->
+    <section class="marquee-container interactive">
+        <div class="marquee-content">
+            <!-- Repeated content for seamless loop -->
+            <span><i data-lucide="asterisk"></i> All in one place</span>
+            <span><i data-lucide="asterisk"></i> Shared Care</span>
+            <span><i data-lucide="asterisk"></i> Peace of mind</span>
+            <span><i data-lucide="asterisk"></i> Medical Records</span>
+            <span><i data-lucide="asterisk"></i> Diet Tracking</span>
+            <!-- Duplicate for loop -->
+            <span><i data-lucide="asterisk"></i> All in one place</span>
+            <span><i data-lucide="asterisk"></i> Shared Care</span>
+            <span><i data-lucide="asterisk"></i> Peace of mind</span>
+            <span><i data-lucide="asterisk"></i> Medical Records</span>
+            <span><i data-lucide="asterisk"></i> Diet Tracking</span>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <div class="container">
+            <div class="text-center mb-5 pb-3">
+                <h2 class="font-heading display-5 fw-bold mb-3">Everything they need.<br>Everything you need.</h2>
+                <p class="text-muted mx-auto" style="max-width: 600px;">Stop digging through group chats and messy notebooks. Omnipaw centralizes communication and care tracking.</p>
+            </div>
+
+            <div class="row g-4">
+                <!-- Feature 1 -->
+                <div class="col-md-4 feature-col">
+                    <div class="glass-panel feature-card interactive tilt-card">
+                        <div class="feature-card-inner">
+                            <div class="feature-icon-wrapper icon-pink">
+                                <i data-lucide="folder-heart"></i>
+                            </div>
+                            <h4 class="font-heading fw-bold">Centralized Records</h4>
+                            <p class="text-muted">Keep vaccination histories, vet contacts, and allergy info in one accessible place for co-parents or sitters.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Feature 2 -->
+                <div class="col-md-4 feature-col">
+                    <div class="glass-panel feature-card interactive tilt-card">
+                        <div class="feature-card-inner">
+                            <div class="feature-icon-wrapper icon-blue">
+                                <i data-lucide="calendar-clock"></i>
+                            </div>
+                            <h4 class="font-heading fw-bold">Care Scheduling</h4>
+                            <p class="text-muted">Log walks, meals, and medication so everyone involved knows exactly what's been done and when.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Feature 3 -->
+                <div class="col-md-4 feature-col">
+                    <div class="glass-panel feature-card interactive tilt-card">
+                        <div class="feature-card-inner">
+                            <div class="feature-icon-wrapper icon-orange">
+                                <i data-lucide="utensils"></i>
+                            </div>
+                            <h4 class="font-heading fw-bold">Dietary Needs</h4>
+                            <p class="text-muted">Detailed portion sizes, feeding schedules, and treat restrictions clearly outlined to prevent double-feeding.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer / Bottom CTA -->
+    <footer class="cta-section">
+        <div class="container">
+            <div class="glass-panel cta-glass text-center">
+                <i data-lucide="paw-print" size="48" style="color: var(--primary-color)" class="mb-4 d-inline-block"></i>
+                <h2 class="font-heading display-4 fw-bold mb-4">Ready to simplify pet care?</h2>
+                <p class="lead text-muted mb-5 mx-auto" style="max-width: 500px;">Join thousands of pet parents waiting to create a more organized life for their best friends.</p>
+                
+                <form class="waitlist-form mx-auto interactive mb-3" id="footer-form">
+                    <input type="email" placeholder="Enter your email address" required class="interactive">
+                    <div class="magnetic-btn-wrap interactive">
+                        <button type="submit" class="magnetic-btn m-1 interactive">
+                            <span>Join Waitlist</span>
+                        </button>
+                    </div>
+                </form>
+                <div class="form-success-msg mx-auto" id="footer-success">
+                    <i class="bi bi-check-circle-fill me-1"></i> Welcome to the pack!
+                </div>
+            </div>
+            
+            <div class="mt-5 text-muted small d-flex justify-content-between align-items-center">
+                <span>&copy; 2026 Omnipaw Platform. All rights reserved.</span>
+                <div class="d-flex gap-3 interactive">
+                    <i data-lucide="twitter" size="18"></i>
+                    <i data-lucide="instagram" size="18"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- GSAP Core & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Lenis (Smooth Scroll) -->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.27/bundled/lenis.min.js"></script>
+
+    <script>
+        // 1. Initialize Icons
+        lucide.createIcons();
+
+        // 2. Initialize Lenis for Smooth Scrolling
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            mouseMultiplier: 1,
+            smoothTouch: false,
+            touchMultiplier: 2,
+            infinite: false,
+        });
+
+        // Sync Lenis with GSAP ScrollTrigger
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+        gsap.ticker.lagSmoothing(0);
+
+        // 3. Custom Cursor Logic
+        const cursor = document.getElementById('custom-cursor');
+        const interactives = document.querySelectorAll('.interactive, a, button, input');
+
+        document.addEventListener('mousemove', (e) => {
+            // Use GSAP for smoother cursor movement
+            gsap.to(cursor, {
+                x: e.clientX,
+                y: e.clientY,
+                duration: 0.1,
+                ease: "power2.out"
+            });
+        });
+
+        interactives.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
+        });
+
+        // 4. GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Hero Entrance Animation
+        const tlHero = gsap.timeline();
+        tlHero.from('.hero-text-col > *', {
+            y: 50,
+            opacity: 0,
+            duration: 1,
+            stagger: 0.15,
+            ease: 'power3.out',
+            delay: 0.2
+        })
+        .from('.main-pet-card', {
+            scale: 0.8,
+            opacity: 0,
+            duration: 1,
+            ease: 'back.out(1.7)'
+        }, "-=0.8")
+        .from('.floating-element', {
+            scale: 0,
+            opacity: 0,
+            duration: 0.6,
+            stagger: 0.1,
+            ease: 'back.out(2)'
+        }, "-=0.5");
+
+        // Features Scroll Animation
+        gsap.from('.feature-col', {
+            scrollTrigger: {
+                trigger: '.features-section',
+                start: 'top 70%',
+            },
+            y: 80,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.2,
+            ease: 'power3.out'
+        });
+
+        // 5. Magnetic Button Effect
+        const magneticBtns = document.querySelectorAll('.magnetic-btn-wrap');
+        
+        magneticBtns.forEach(wrap => {
+            const btn = wrap.querySelector('.magnetic-btn');
+            
+            wrap.addEventListener('mousemove', (e) => {
+                const rect = wrap.getBoundingClientRect();
+                const x = (e.clientX - rect.left) - (rect.width / 2);
+                const y = (e.clientY - rect.top) - (rect.height / 2);
+                
+                // Move button slightly towards cursor
+                gsap.to(btn, {
+                    x: x * 0.4,
+                    y: y * 0.4,
+                    duration: 0.3,
+                    ease: 'power2.out'
+                });
+            });
+
+            wrap.addEventListener('mouseleave', () => {
+                // Snap back
+                gsap.to(btn, {
+                    x: 0,
+                    y: 0,
+                    duration: 0.7,
+                    ease: 'elastic.out(1, 0.3)'
+                });
+            });
+        });
+
+        // 6. 3D Tilt Effect for Feature Cards
+        const tiltCards = document.querySelectorAll('.tilt-card');
+        
+        tiltCards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left; // x position within the element
+                const y = e.clientY - rect.top;  // y position within the element
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = ((y - centerY) / centerY) * -10; // Max rotation 10deg
+                const rotateY = ((x - centerX) / centerX) * 10;
+                
+                gsap.to(card, {
+                    rotateX: rotateX,
+                    rotateY: rotateY,
+                    duration: 0.1,
+                    ease: 'none'
+                });
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, {
+                    rotateX: 0,
+                    rotateY: 0,
+                    duration: 0.5,
+                    ease: 'power2.out'
+                });
+            });
+        });
+
+        // 7. Form Submission Handling (Mock)
+        function handleFormSubmit(formId, successMsgId) {
+            const form = document.getElementById(formId);
+            const successMsg = document.getElementById(successMsgId);
+            
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const btn = form.querySelector('.magnetic-btn');
+                const btnText = btn.querySelector('span');
+                const input = form.querySelector('input');
+                
+                // Animate button state
+                btnText.textContent = "Please wait...";
+                gsap.to(btn, { scale: 0.95, duration: 0.1, yoyo: true, repeat: 1 });
+                
+                setTimeout(() => {
+                    form.style.display = 'none';
+                    successMsg.style.display = 'block';
+                    // Little pop animation for success message
+                    gsap.from(successMsg, { y: 10, opacity: 0, duration: 0.4, ease: 'back.out' });
+                }, 800);
+            });
+        }
+
+        handleFormSubmit('hero-form', 'hero-success');
+        handleFormSubmit('footer-form', 'footer-success');
+
+    </script>
+</body>
+</html>
