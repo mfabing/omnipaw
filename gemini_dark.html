@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetSync | Shared Pet Care, Simplified.</title>
+    
+    <!-- Google Fonts: Plus Jakarta Sans for a modern, premium tech feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS for Theme and Animations -->
+    <style>
+        :root {
+            /* Custom Theme Colors - 'Midnight Flora' */
+            --ps-bg-dark: #0a0a0c;
+            --ps-bg-card: #141418;
+            --ps-accent-primary: #ff6b6b; /* Warm coral for pets */
+            --ps-accent-secondary: #4ecdc4; /* Mint for health */
+            --ps-text-main: #f8f9fa;
+            --ps-text-muted: #8e8e93;
+            
+            /* Typography */
+            --ps-font: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        /* Base Resets & Typography */
+        body, html {
+            margin: 0;
+            padding: 0;
+            background-color: var(--ps-bg-dark);
+            color: var(--ps-text-main);
+            font-family: var(--ps-font);
+            overflow-x: hidden;
+            /* Hide default scrollbar for custom smooth scroll feel */
+            scrollbar-width: none; 
+        }
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+
+        /* Custom Cursor */
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--ps-accent-secondary);
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
+        }
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(78, 205, 196, 0.5);
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s;
+        }
+        
+        /* Interactive element cursor states */
+        body.hovering .cursor-dot {
+            width: 0;
+            height: 0;
+        }
+        body.hovering .cursor-outline {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(255, 107, 107, 0.1);
+            border-color: var(--ps-accent-primary);
+            backdrop-filter: blur(2px);
+        }
+
+        /* Navigation */
+        .navbar-custom {
+            background: rgba(10, 10, 12, 0.7);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: transform 0.3s ease;
+        }
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--ps-text-main) !important;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .nav-link {
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--ps-text-main) !important;
+            position: relative;
+            overflow: hidden;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--ps-accent-primary);
+            transform: translateX(-101%);
+            transition: transform 0.3s ease;
+        }
+        .nav-link:hover::after {
+            transform: translateX(0);
+        }
+
+        /* Buttons */
+        .btn-custom {
+            background-color: transparent;
+            color: var(--ps-text-main);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            z-index: 1;
+        }
+        .btn-custom::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--ps-accent-primary);
+            z-index: -1;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        .btn-custom:hover {
+            border-color: var(--ps-accent-primary);
+        }
+        .btn-custom:hover::before {
+            transform: scaleX(1);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding-top: 80px; /* offset for nav */
+            overflow: hidden;
+        }
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 7rem);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+        .hero-title .highlight {
+            color: var(--ps-accent-primary);
+            display: inline-block;
+        }
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 2vw, 1.5rem);
+            color: var(--ps-text-muted);
+            max-width: 600px;
+            margin-bottom: 2.5rem;
+            font-weight: 400;
+        }
+        
+        /* Background abstract blobs */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            z-index: 0;
+            animation: float 20s infinite alternate ease-in-out;
+        }
+        .blob-1 { top: 10%; left: 10%; width: 400px; height: 400px; background: var(--ps-accent-secondary); }
+        .blob-2 { bottom: 10%; right: 10%; width: 500px; height: 500px; background: var(--ps-accent-primary); animation-delay: -10s; }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(100px, 50px) scale(1.2); }
+        }
+
+        /* Bento Grid Features Section */
+        .features-section {
+            padding: 120px 0;
+            position: relative;
+            z-index: 2;
+        }
+        .bento-card {
+            background: var(--ps-bg-card);
+            border: 1px solid rgba(255,255,255,0.03);
+            border-radius: 24px;
+            padding: 40px;
+            height: 100%;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .bento-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(78, 205, 196, 0.3);
+        }
+        .bento-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            color: var(--ps-accent-secondary);
+        }
+        .bento-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+        .bento-card p {
+            color: var(--ps-text-muted);
+            margin: 0;
+            line-height: 1.6;
+        }
+        /* Specific card spanning */
+        .bento-large {
+            background: linear-gradient(135deg, var(--ps-bg-card) 0%, #1a1a24 100%);
+        }
+        
+        /* Decorative element inside card */
+        .card-deco {
+            position: absolute;
+            bottom: -20px;
+            right: -20px;
+            opacity: 0.05;
+            transform: scale(2);
+            transition: opacity 0.3s, transform 0.5s ease;
+        }
+        .bento-card:hover .card-deco {
+            opacity: 0.15;
+            transform: scale(2.2) rotate(-10deg);
+        }
+
+        /* Horizontal Scroll Section (The "What's Different") */
+        .horizontal-section-wrapper {
+            overflow: hidden;
+            position: relative;
+            background: var(--ps-bg-card);
+        }
+        .horizontal-container {
+            width: 300vw; /* 3 panels = 300% */
+            display: flex;
+            flex-wrap: nowrap;
+            height: 100vh;
+        }
+        .h-panel {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5vw;
+        }
+        .h-panel-content {
+            max-width: 800px;
+            text-align: left;
+        }
+        .h-number {
+            font-size: 8rem;
+            font-weight: 800;
+            color: transparent;
+            -webkit-text-stroke: 2px rgba(255,255,255,0.1);
+            line-height: 1;
+            margin-bottom: -2rem;
+            position: relative;
+            z-index: 0;
+        }
+        .h-panel h2 {
+            font-size: 4rem;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 1.5rem;
+        }
+        .h-panel p {
+            font-size: 1.5rem;
+            color: var(--ps-text-muted);
+        }
+        
+        /* Image placeholder style for horizontal scroll */
+        .h-image-wrapper {
+            width: 100%;
+            height: 400px;
+            border-radius: 20px;
+            background: linear-gradient(45deg, #1a1a24, #2a2a35);
+            position: relative;
+            overflow: hidden;
+            margin-top: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .h-image-wrapper i {
+            color: rgba(255,255,255,0.1);
+        }
+
+        /* Interactive Demo Section */
+        .demo-section {
+            padding: 150px 0;
+            text-align: center;
+        }
+        .sync-visualizer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 60px;
+        }
+        .user-node {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--ps-bg-card);
+            border: 2px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .central-hub {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, var(--ps-accent-primary), #ff9a9e);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 50px rgba(255, 107, 107, 0.3);
+            z-index: 2;
+        }
+        .sync-line {
+            height: 2px;
+            width: 100px;
+            background: rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .sync-line::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 50%;
+            background: var(--ps-accent-secondary);
+            animation: dataFlow 2s linear infinite;
+        }
+        @keyframes dataFlow {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(200%); }
+        }
+
+        /* Footer */
+        footer {
+            padding: 80px 0 40px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            text-align: center;
+        }
+        .footer-cta {
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 2rem;
+        }
+        
+        /* Utility */
+        .reveal-text {
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom fixed-top py-3" id="navbar">
+        <div class="container">
+            <a class="navbar-brand interactive" href="#">
+                <i data-lucide="paw-print" style="color: var(--ps-accent-primary);"></i>
+                PetSync
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i data-lucide="menu" style="color: white;"></i>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-center gap-4">
+                    <li class="nav-item">
+                        <a class="nav-link interactive" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link interactive" href="#why">Why Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn-custom interactive" href="#join">Get Early Access</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <!-- Abstract Background -->
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        
+        <div class="container position-relative">
+            <div class="row">
+                <div class="col-lg-10 col-xl-8">
+                    <h1 class="hero-title reveal-text" id="heroTitle">
+                        Co-parenting your pet, <br>
+                        <span class="highlight">finally simplified.</span>
+                    </h1>
+                    <p class="hero-subtitle gs-reveal">
+                        Stop asking "Did the dog eat?". One central hub for feeding schedules, medical records, and vital info, synced instantly across all caretakers.
+                    </p>
+                    <div class="d-flex gap-3 gs-reveal">
+                        <button class="btn-custom interactive">Start Syncing Free</button>
+                        <button class="btn-custom interactive" style="border-color: transparent;">See How it Works <i data-lucide="arrow-right" class="ms-2" style="width: 18px;"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Bento Grid Features -->
+    <section class="features-section" id="features">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-12 text-center">
+                    <h2 class="display-4 fw-bold gs-reveal">Everything in one place. <br> <span style="color: var(--ps-text-muted); font-size: 0.6em;">Literally everything.</span></h2>
+                </div>
+            </div>
+            
+            <div class="row g-4 bento-wrapper">
+                <!-- Large Card -->
+                <div class="col-md-8 bento-item">
+                    <div class="bento-card bento-large interactive">
+                        <i data-lucide="activity" class="card-deco" style="width: 150px; height: 150px;"></i>
+                        <div class="bento-icon">
+                            <i data-lucide="calendar-clock"></i>
+                        </div>
+                        <h3>Real-time Routine Tracking</h3>
+                        <p>No more double-feeding. Log meals, walks, and medications with a single tap. Everyone in your pet's 'circle' gets notified instantly. The timeline keeps a perfect history.</p>
+                    </div>
+                </div>
+                
+                <!-- Small Card 1 -->
+                <div class="col-md-4 bento-item">
+                    <div class="bento-card interactive">
+                        <i data-lucide="file-text" class="card-deco" style="width: 150px; height: 150px;"></i>
+                        <div class="bento-icon">
+                            <i data-lucide="folder-heart"></i>
+                        </div>
+                        <h3>Medical Vault</h3>
+                        <p>Vaccination records, vet contacts, and allergy lists accessible 24/7. Never dig through emails at the emergency vet again.</p>
+                    </div>
+                </div>
+
+                <!-- Small Card 2 -->
+                <div class="col-md-4 bento-item">
+                    <div class="bento-card interactive">
+                        <i data-lucide="users" class="card-deco" style="width: 150px; height: 150px;"></i>
+                        <div class="bento-icon">
+                            <i data-lucide="shield-check"></i>
+                        </div>
+                        <h3>Granular Permissions</h3>
+                        <p>Give the dog walker access to routine tasks, but keep medical records restricted to owners.</p>
+                    </div>
+                </div>
+
+                <!-- Medium Card -->
+                <div class="col-md-8 bento-item">
+                    <div class="bento-card interactive">
+                        <i data-lucide="bell-ring" class="card-deco" style="width: 150px; height: 150px;"></i>
+                        <div class="bento-icon">
+                            <i data-lucide="brain-circuit"></i>
+                        </div>
+                        <h3>Smart Insights</h3>
+                        <p>Our platform analyzes logged data to notice trends. We'll alert you if your cat's water intake drops or if it's time for flea medication based on historical patterns.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Horizontal Scroll Section (What's Different) -->
+    <section class="horizontal-section-wrapper" id="why">
+        <div class="horizontal-container">
+            <!-- Panel 1 -->
+            <div class="h-panel">
+                <div class="row w-100 align-items-center">
+                    <div class="col-lg-5 offset-lg-1 h-panel-content">
+                        <div class="h-number">01</div>
+                        <h2>No more group chats.</h2>
+                        <p>Forget scrolling through endless texts asking "Did someone let Luna out?". State-based design means you open the app and instantly see the current status of your pet's day.</p>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="h-image-wrapper">
+                            <i data-lucide="message-square-off" style="width: 80px; height: 80px;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Panel 2 -->
+            <div class="h-panel">
+                <div class="row w-100 align-items-center">
+                    <div class="col-lg-5 offset-lg-1 h-panel-content">
+                        <div class="h-number">02</div>
+                        <h2>Offline First.</h2>
+                        <p>At the park with bad reception? At a rural vet? PetSync stores critical medical ID and recent routine data locally on your device, syncing seamlessly when you reconnect.</p>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="h-image-wrapper">
+                            <i data-lucide="wifi-off" style="width: 80px; height: 80px;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel 3 -->
+            <div class="h-panel">
+                <div class="row w-100 align-items-center">
+                    <div class="col-lg-5 offset-lg-1 h-panel-content">
+                        <div class="h-number">03</div>
+                        <h2>Designed for Chaos.</h2>
+                        <p>Co-parenting is messy. We built quick-action widgets for iOS and Android. Log a pee break from your lock screen in 1 second. It's built for speed, not scrolling.</p>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="h-image-wrapper">
+                            <i data-lucide="zap" style="width: 80px; height: 80px;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Sync Demo -->
+    <section class="demo-section container" id="demo">
+        <h2 class="display-5 fw-bold gs-reveal">Perfect Harmony</h2>
+        <p class="text-muted gs-reveal">Watch as data syncs instantly across the care team.</p>
+        
+        <div class="sync-visualizer gs-reveal interactive">
+            <div class="user-node flex-column">
+                <i data-lucide="user"></i>
+                <small class="mt-2" style="font-size: 0.6rem;">Partner</small>
+            </div>
+            <div class="sync-line"></div>
+            <div class="central-hub">
+                <i data-lucide="database" style="color: white; width: 40px; height: 40px;"></i>
+            </div>
+            <div class="sync-line" style="transform: scaleX(-1);"></div>
+            <div class="user-node flex-column">
+                <i data-lucide="dog"></i>
+                <small class="mt-2" style="font-size: 0.6rem;">Walker</small>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer / Final CTA -->
+    <footer id="join">
+        <div class="container">
+            <h2 class="footer-cta gs-reveal">Ready to restore peace?</h2>
+            <button class="btn-custom interactive btn-lg px-5 py-3 gs-reveal" style="font-size: 1.2rem;">Get Early Access</button>
+            
+            <div class="mt-5 pt-5 d-flex justify-content-between align-items-center border-top border-dark">
+                <div class="d-flex align-items-center gap-2">
+                    <i data-lucide="paw-print" style="color: var(--ps-accent-primary); width: 20px;"></i>
+                    <span class="fw-bold">PetSync</span>
+                </div>
+                <p class="mb-0 text-muted small">© 2026 PetSync Platform. All chaos managed.</p>
+                <div class="d-flex gap-3">
+                    <a href="#" class="text-muted interactive hover-primary"><i data-lucide="twitter" style="width: 20px;"></i></a>
+                    <a href="#" class="text-muted interactive hover-primary"><i data-lucide="instagram" style="width: 20px;"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- GSAP Core & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Lenis for Smooth Scrolling -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.32/dist/lenis.min.js"></script>
+
+    <script>
+        // 1. Initialize Icons
+        lucide.createIcons();
+
+        // 2. Setup Smooth Scrolling (Lenis)
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // smooth easing
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            mouseMultiplier: 1,
+            smoothTouch: false,
+            touchMultiplier: 2,
+            infinite: false,
+        });
+
+        // Integrate Lenis with GSAP ScrollTrigger
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+
+        // 3. Custom Cursor Logic
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+            
+            // Move dot instantly
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+            
+            // Animate outline with slight delay for smooth trailing effect
+            cursorOutline.animate({
+                left: `${posX}px`,
+                top: `${posY}px`
+            }, { duration: 500, fill: "forwards" });
+        });
+
+        // Cursor hover states on elements with class 'interactive'
+        const interactives = document.querySelectorAll('.interactive');
+        interactives.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                document.body.classList.add('hovering');
+            });
+            el.addEventListener('mouseleave', () => {
+                document.body.classList.remove('hovering');
+            });
+        });
+
+        // 4. GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Navbar blur effect on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.style.background = 'rgba(10, 10, 12, 0.9)';
+                nav.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.1)';
+            } else {
+                nav.style.background = 'rgba(10, 10, 12, 0.7)';
+                nav.style.boxShadow = 'none';
+            }
+        });
+
+        // Hero Text Animation
+        // Split text manually for simplicity instead of loading SplitText plugin
+        const titleEl = document.getElementById('heroTitle');
+        const titleHtml = titleEl.innerHTML;
+        // Simple line reveal approach for hero
+        gsap.fromTo(titleEl, 
+            { y: 100, opacity: 0, clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 0)' },
+            { y: 0, opacity: 1, clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)', duration: 1.5, ease: "power4.out", delay: 0.2 }
+        );
+
+        // Generic reveal for elements with 'gs-reveal' class
+        const revealElements = document.querySelectorAll('.gs-reveal');
+        revealElements.forEach((el) => {
+            gsap.fromTo(el, 
+                { y: 50, opacity: 0 },
+                { 
+                    y: 0, 
+                    opacity: 1, 
+                    duration: 1, 
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 85%", // Trigger when element is 85% down viewport
+                        toggleActions: "play none none reverse"
+                    }
+                }
+            );
+        });
+
+        // Bento Grid Stagger Animation
+        gsap.from(".bento-item", {
+            y: 100,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.1,
+            ease: "back.out(1.2)",
+            scrollTrigger: {
+                trigger: ".bento-wrapper",
+                start: "top 75%",
+            }
+        });
+
+        // Horizontal Scroll Magic
+        const horizontalSection = document.querySelector('.horizontal-section-wrapper');
+        const horizontalContainer = document.querySelector('.horizontal-container');
+        
+        // Calculate how far to scroll based on the width of the container minus viewport width
+        let scrollWidth = horizontalContainer.scrollWidth - window.innerWidth;
+
+        let horizontalTween = gsap.to(horizontalContainer, {
+            x: () => -scrollWidth,
+            ease: "none",
+            scrollTrigger: {
+                trigger: horizontalSection,
+                pin: true,           // Pin the section in place while scrolling content horizontally
+                scrub: 1,            // Smooth scrubbing taking 1 second to catch up
+                start: "top top",
+                end: () => `+=${scrollWidth}`, // The total distance scrolled vertically equals horizontal travel
+                invalidateOnRefresh: true // Recalculate on resize
+            }
+        });
+
+        // Animate elements inside the horizontal panels as they come into view horizontally
+        gsap.utils.toArray('.h-panel-content').forEach((panelContent, i) => {
+            // Need a container trigger that fires based on the horizontal tween's progress
+            gsap.from(panelContent.children, {
+                y: 50,
+                opacity: 0,
+                stagger: 0.1,
+                duration: 0.8,
+                scrollTrigger: {
+                    trigger: panelContent.parentElement, // The h-panel
+                    containerAnimation: horizontalTween, // Link to the horizontal timeline
+                    start: "left center", // When left side of panel hits center of viewport
+                    toggleActions: "play none none reverse"
+                }
+            });
+        });
+
+        // Micro-interaction: Magnetic effect on central hub in demo
+        const centralHub = document.querySelector('.central-hub');
+        centralHub.addEventListener('mousemove', (e) => {
+            const rect = centralHub.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            
+            gsap.to(centralHub, {
+                x: x * 0.2, // Movement strength
+                y: y * 0.2,
+                rotationX: y * -0.1,
+                rotationY: x * 0.1,
+                ease: "power2.out",
+                duration: 0.3
+            });
+        });
+        
+        centralHub.addEventListener('mouseleave', () => {
+            gsap.to(centralHub, {
+                x: 0, y: 0, rotationX: 0, rotationY: 0,
+                ease: "elastic.out(1, 0.3)",
+                duration: 1
+            });
+        });
+
+    </script>
+</body>
+</html>
