@@ -1,0 +1,1260 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>OmniPaw — One pet. Many hands. Zero guesswork.</title>
+	<meta name="description" content="OmniPaw is the shared care hub for pet owners, families, sitters, and boarding facilities. Meals, medications, health records, and emergency details in one calm place.">
+	<meta name="theme-color" content="#123B2F">
+	<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23123B2F'/%3E%3Ccircle cx='32' cy='39' r='11' fill='%23DDE8D5'/%3E%3Ccircle cx='18' cy='25' r='6' fill='%23DDE8D5'/%3E%3Ccircle cx='46' cy='25' r='6' fill='%23DDE8D5'/%3E%3Ccircle cx='26' cy='16' r='5' fill='%23DDE8D5'/%3E%3Ccircle cx='40' cy='16' r='5' fill='%23DDE8D5'/%3E%3C/svg%3E">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+	<script>document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js');</script>
+
+	<style>
+		:root{
+			--paper:#F8F4EA;
+			--paper-2:#F1EADA;
+			--cream:#FDFBF5;
+			--ink:#14251E;
+			--pine:#123B2F;
+			--pine-2:#0B2A21;
+			--pine-3:#1D4B3C;
+			--sage:#DDE8D5;
+			--sage-2:#C9DBBE;
+			--sage-3:#A9C69B;
+			--clay:#C65F3E;
+			--clay-2:#A9492D;
+			--clay-soft:#F4DBCF;
+			--sun:#E9B44C;
+			--muted:#5A6A61;
+			--muted-2:#7B8981;
+			--line:rgba(20,37,30,.12);
+			--line-strong:rgba(20,37,30,.22);
+			--white:#fff;
+			--shadow-sm:0 2px 10px rgba(20,37,30,.06);
+			--shadow:0 20px 55px -24px rgba(20,37,30,.32);
+			--shadow-lg:0 44px 100px -36px rgba(20,37,30,.4);
+			--r-sm:14px;
+			--r:22px;
+			--r-lg:32px;
+			--bs-body-bg:var(--paper);
+			--bs-body-color:var(--ink);
+			--bs-body-font-family:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;
+			--bs-border-color:var(--line);
+			--bs-link-color:var(--clay);
+			--bs-link-hover-color:var(--clay-2);
+		}
+		html{scroll-behavior:smooth;scroll-padding-top:92px}
+		body{
+			margin:0;
+			background:var(--paper);
+			color:var(--ink);
+			font-family:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;
+			font-size:1.0625rem;
+			line-height:1.65;
+			overflow-x:hidden;
+			-webkit-font-smoothing:antialiased;
+			text-rendering:optimizeLegibility;
+		}
+		h1,h2,h3,h4,.font-display{font-family:'Fraunces',Georgia,serif;font-weight:600;letter-spacing:-.028em;line-height:1.04;color:inherit;text-wrap:balance}
+		h1{font-size:clamp(2.85rem,6.2vw,5.15rem);line-height:.98}
+		h2{font-size:clamp(2.1rem,4.4vw,3.55rem)}
+		h3{font-size:clamp(1.28rem,2vw,1.62rem);line-height:1.16}
+		p{margin-top:0}
+		img{max-width:100%}
+		::selection{background:var(--sage-2);color:var(--ink)}
+		:focus-visible{outline:3px solid var(--clay);outline-offset:3px;border-radius:6px}
+		.container{--bs-gutter-x:2.5rem}
+		.section{padding-block:clamp(4.5rem,8.5vw,7.5rem);position:relative}
+		.section-sm{padding-block:clamp(3rem,5vw,4.5rem);position:relative}
+		.skip-link{position:absolute;left:1rem;top:-100px;z-index:2000;background:var(--pine);color:var(--cream);padding:.7rem 1rem;border-radius:10px;font-weight:700;transition:top .2s}
+		.skip-link:focus{top:1rem}
+
+		/* ---------- type helpers ---------- */
+		.eyebrow{display:inline-flex;align-items:center;gap:.65rem;font-size:.71rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--clay);margin-bottom:1.1rem}
+		.eyebrow::before{content:"";width:26px;height:2px;border-radius:2px;background:currentColor;flex:0 0 auto}
+		.on-dark .eyebrow{color:var(--sage-2)}
+		.hl{font-style:italic;color:var(--clay);font-weight:500}
+		.on-dark .hl{color:var(--sun)}
+		.lede{font-size:clamp(1.06rem,1.5vw,1.22rem);line-height:1.62;color:var(--muted)}
+		.on-dark .lede{color:rgba(253,251,245,.72)}
+		.muted{color:var(--muted)}
+		.tiny{font-size:.78rem;line-height:1.5}
+		.serif{font-family:'Fraunces',Georgia,serif}
+
+		/* ---------- buttons ---------- */
+		.btn{--bs-btn-font-weight:700;--bs-btn-font-size:.94rem;--bs-btn-padding-x:1.35rem;--bs-btn-padding-y:.78rem;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;transition:transform .2s,background .2s,border-color .2s,box-shadow .2s}
+		.btn:hover{transform:translateY(-1px)}
+		.btn-clay{--bs-btn-bg:var(--clay);--bs-btn-border-color:var(--clay);--bs-btn-color:#fff;--bs-btn-hover-bg:var(--clay-2);--bs-btn-hover-border-color:var(--clay-2);--bs-btn-hover-color:#fff;--bs-btn-active-bg:var(--clay-2);--bs-btn-active-border-color:var(--clay-2);--bs-btn-active-color:#fff;box-shadow:0 10px 24px -12px rgba(198,95,62,.8)}
+		.btn-pine{--bs-btn-bg:var(--pine);--bs-btn-border-color:var(--pine);--bs-btn-color:var(--cream);--bs-btn-hover-bg:var(--pine-2);--bs-btn-hover-border-color:var(--pine-2);--bs-btn-hover-color:var(--cream);--bs-btn-active-bg:var(--pine-2);--bs-btn-active-border-color:var(--pine-2);--bs-btn-active-color:var(--cream)}
+		.btn-cream{--bs-btn-bg:var(--cream);--bs-btn-border-color:var(--cream);--bs-btn-color:var(--pine);--bs-btn-hover-bg:#fff;--bs-btn-hover-border-color:#fff;--bs-btn-hover-color:var(--pine);--bs-btn-active-bg:#fff;--bs-btn-active-border-color:#fff;--bs-btn-active-color:var(--pine)}
+		.btn-outline-ink{--bs-btn-bg:transparent;--bs-btn-border-color:var(--line-strong);--bs-btn-color:var(--ink);--bs-btn-hover-bg:var(--ink);--bs-btn-hover-border-color:var(--ink);--bs-btn-hover-color:var(--cream);--bs-btn-active-bg:var(--ink);--bs-btn-active-border-color:var(--ink);--bs-btn-active-color:var(--cream)}
+		.btn-outline-cream{--bs-btn-bg:transparent;--bs-btn-border-color:rgba(253,251,245,.34);--bs-btn-color:var(--cream);--bs-btn-hover-bg:rgba(253,251,245,.1);--bs-btn-hover-border-color:rgba(253,251,245,.6);--bs-btn-hover-color:var(--cream);--bs-btn-active-bg:rgba(253,251,245,.16);--bs-btn-active-border-color:rgba(253,251,245,.6);--bs-btn-active-color:var(--cream)}
+		.btn-quiet{padding:.55rem .8rem;color:var(--ink);background:transparent;border:0;font-weight:700;font-size:.9rem;text-decoration:none;display:inline-flex;align-items:center;gap:.4rem}
+		.btn-quiet:hover{color:var(--clay)}
+		.link-arrow{font-weight:800;font-size:.92rem;color:var(--ink);text-decoration:none;display:inline-flex;align-items:center;gap:.45rem}
+		.link-arrow:hover{color:var(--clay)}
+		.link-arrow i{transition:transform .2s}
+		.link-arrow:hover i{transform:translateX(3px)}
+
+		/* ---------- nav ---------- */
+		.scroll-progress{position:fixed;left:0;top:0;height:3px;width:100%;z-index:1100;background:transparent;pointer-events:none}
+		.scroll-progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--clay),var(--sun));border-radius:0 3px 3px 0;transition:width .08s linear}
+		.site-nav{position:fixed;top:0;left:0;right:0;z-index:1050;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid transparent;transition:border-color .25s,box-shadow .25s}
+		.site-nav.is-scrolled{border-bottom-color:var(--line);box-shadow:0 8px 30px -22px rgba(20,37,30,.45)}
+		.site-nav .navbar{padding:.7rem 0;min-height:76px}
+		.brand{display:inline-flex;align-items:center;gap:.65rem;text-decoration:none;color:var(--ink)}
+		.brand-mark{width:40px;height:40px;border-radius:13px;background:var(--pine);color:var(--sage);display:grid;place-items:center;transform:rotate(-5deg);box-shadow:0 5px 14px -8px rgba(18,59,47,.8)}
+		.brand-mark svg{width:23px;height:23px;stroke-width:2}
+		.brand-name{font-family:'Fraunces',Georgia,serif;font-size:1.5rem;font-weight:600;letter-spacing:-.04em;line-height:1}
+		.brand-name b{color:var(--clay);font-weight:600}
+		.site-nav .nav-link{font-size:.9rem;font-weight:700;color:var(--ink);padding:.5rem .8rem!important;border-radius:999px}
+		.site-nav .nav-link:hover{background:rgba(20,37,30,.06);color:var(--ink)}
+		.site-nav .navbar-toggler{border:0;box-shadow:none;padding:.35rem .45rem;color:var(--ink)}
+		.site-nav .navbar-toggler i{font-size:1.7rem;line-height:1}
+		.nav-actions{display:flex;align-items:center;gap:.45rem}
+		.nav-signin{font-size:.9rem;font-weight:700;text-decoration:none;color:var(--ink);padding:.5rem .8rem}
+		.nav-signin:hover{color:var(--clay)}
+		@media (max-width:991.98px){
+			.site-nav .navbar-collapse{background:var(--cream);border:1px solid var(--line);border-radius:20px;padding:1rem;margin-top:.7rem;box-shadow:var(--shadow)}
+			.site-nav .nav-item{padding:.1rem 0}
+			.nav-actions{padding:.8rem .2rem .2rem;justify-content:flex-start}
+		}
+
+		/* ---------- hero ---------- */
+		.hero{padding-top:clamp(7.2rem,11vw,9.5rem);padding-bottom:clamp(3.5rem,7vw,6rem);position:relative;overflow:hidden}
+		.hero::before{content:"";position:absolute;width:52vw;height:52vw;max-width:760px;max-height:760px;right:-14vw;top:-8vw;border-radius:50%;background:radial-gradient(circle at 38% 38%,rgba(201,219,190,.72),rgba(221,232,213,.24) 58%,transparent 72%);pointer-events:none}
+		.hero::after{content:"";position:absolute;width:24vw;height:24vw;max-width:330px;max-height:330px;left:-9vw;bottom:-7vw;border-radius:50%;background:radial-gradient(circle,rgba(198,95,62,.12),transparent 68%);pointer-events:none}
+		.hero .container{position:relative;z-index:1}
+		.hero-eyebrow{display:inline-flex;align-items:center;gap:.55rem;background:var(--cream);border:1px solid var(--line);border-radius:999px;padding:.42rem .85rem .42rem .5rem;font-size:.75rem;font-weight:800;letter-spacing:.02em;color:var(--ink);box-shadow:var(--shadow-sm);margin-bottom:1.5rem}
+		.hero-eyebrow .dot{width:23px;height:23px;border-radius:50%;background:var(--sage);display:grid;place-items:center;color:var(--pine)}
+		.hero-eyebrow .dot svg{width:13px;height:13px}
+		.hero-eyebrow .sep{color:var(--muted-2);font-weight:600}
+		.hero h1{margin-bottom:1.5rem}
+		.hero-sub{max-width:33rem;font-size:clamp(1.05rem,1.45vw,1.2rem);line-height:1.62;color:var(--muted);margin-bottom:1.8rem}
+		.hero-cta{display:flex;flex-wrap:wrap;align-items:center;gap:.8rem 1rem;margin-bottom:1.15rem}
+		.hero-micro{display:flex;flex-wrap:wrap;align-items:center;gap:.45rem .9rem;font-size:.8rem;font-weight:600;color:var(--muted)}
+		.hero-micro i{color:var(--pine)}
+		.hero-proof{display:flex;align-items:center;gap:.75rem;margin-top:2rem}
+		.avatar-stack{display:flex;align-items:center}
+		.avatar-stack img,.avatar-stack .avatar-more{width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid var(--paper);margin-left:-9px;background:var(--sage);display:grid;place-items:center;font-size:.65rem;font-weight:800;color:var(--pine)}
+		.avatar-stack img:first-child,.avatar-stack .avatar-more:first-child{margin-left:0}
+		.hero-proof p{margin:0;font-size:.79rem;line-height:1.35;color:var(--muted)}
+		.hero-proof strong{color:var(--ink)}
+
+		/* ---------- app mockup ---------- */
+		.mockup-wrap{position:relative;max-width:478px;margin-left:auto;padding:1.1rem 1rem 1.4rem}
+		.mockup{position:relative;background:var(--cream);border:1px solid var(--line);border-radius:36px;padding:13px;box-shadow:var(--shadow-lg);transform:rotate(-.6deg)}
+		.mockup-screen{background:#fff;border:1px solid var(--line);border-radius:26px;padding:16px;overflow:hidden}
+		.app-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}
+		.app-id{display:flex;align-items:center;gap:.45rem;font-family:'Fraunces',Georgia,serif;font-size:1.02rem;font-weight:600;letter-spacing:-.03em}
+		.app-id .mark{width:25px;height:25px;border-radius:8px;background:var(--pine);color:var(--sage);display:grid;place-items:center}
+		.app-id .mark svg{width:14px;height:14px}
+		.live-pill{display:inline-flex;align-items:center;gap:.35rem;font-size:.62rem;font-weight:800;letter-spacing:.04em;color:var(--pine);background:var(--sage);border-radius:999px;padding:.28rem .55rem}
+		.live-pill .dot{width:6px;height:6px;border-radius:50%;background:#2E8B62;box-shadow:0 0 0 3px rgba(46,139,98,.14)}
+		.pet-strip{display:flex;align-items:center;gap:.65rem;background:linear-gradient(125deg,var(--sage),#EDF3E7);border-radius:17px;padding:.65rem;margin-bottom:11px}
+		.pet-strip img{width:50px;height:50px;border-radius:13px;object-fit:cover;border:2px solid rgba(255,255,255,.7)}
+		.pet-meta{min-width:0;flex:1}
+		.pet-meta h3{font-family:'Fraunces',Georgia,serif;font-size:1.1rem;line-height:1.05;margin:0;letter-spacing:-.02em}
+		.pet-meta p{font-size:.66rem;color:var(--muted);margin:.18rem 0 0}
+		.pet-team{display:flex;align-items:center;gap:.35rem}
+		.pet-team .avatar-stack img,.pet-team .avatar-stack .avatar-more{width:25px;height:25px;border-color:var(--sage);margin-left:-7px;font-size:.55rem}
+		.care-card{border:1px solid var(--line);border-radius:17px;padding:.7rem .75rem;background:#fff}
+		.care-card-head{display:flex;align-items:center;justify-content:space-between;font-size:.7rem;font-weight:800;color:var(--muted);margin-bottom:.45rem}
+		.care-card-head span:last-child{color:var(--pine);font-weight:800}
+		.care-progress{height:5px;background:var(--paper-2);border-radius:99px;overflow:hidden;margin-bottom:.25rem}
+		.care-progress b{display:block;height:100%;width:60%;background:linear-gradient(90deg,var(--pine-3),var(--pine));border-radius:99px}
+		.task{display:flex;align-items:center;gap:.55rem;padding:.42rem 0;border-top:1px solid rgba(20,37,30,.07)}
+		.task:first-of-type{border-top:0}
+		.task-check{width:23px;height:23px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto;font-size:.65rem}
+		.task.done .task-check{background:var(--pine);color:#fff}
+		.task.due .task-check{border:2px solid var(--clay);background:var(--clay-soft);color:var(--clay)}
+		.task.next .task-check{border:1.5px dashed var(--line-strong);color:var(--muted-2)}
+		.task-info{min-width:0;flex:1}
+		.task-info b{display:block;font-size:.76rem;line-height:1.2;font-weight:800}
+		.task-info small{display:block;font-size:.61rem;color:var(--muted);line-height:1.3;margin-top:.08rem}
+		.task.status{font-size:.59rem;font-weight:800;color:var(--pine);text-align:right;white-space:nowrap}
+		.task.status.due{color:var(--clay)}
+		.task-pill{font-size:.57rem;font-weight:800;color:var(--clay);background:var(--clay-soft);padding:.2rem .42rem;border-radius:999px;white-space:nowrap}
+		.emergency{display:flex;align-items:center;gap:.55rem;background:var(--clay-soft);border-radius:15px;padding:.55rem .65rem;margin-top:10px}
+		.emergency .ic{width:27px;height:27px;border-radius:9px;background:#fff;color:var(--clay);display:grid;place-items:center;flex:0 0 auto}
+		.emergency .ic svg{width:14px;height:14px}
+		.emergency .txt{flex:1;min-width:0}
+		.emergency .txt b{display:block;font-size:.68rem;line-height:1.2}
+		.emergency .txt small{display:block;font-size:.58rem;color:rgba(20,37,30,.62);margin-top:.05rem}
+		.emergency .call{width:27px;height:27px;border-radius:50%;background:var(--pine);color:var(--cream);display:grid;place-items:center;flex:0 0 auto}
+		.emergency .call svg{width:13px;height:13px}
+		.sync-note{display:flex;align-items:center;justify-content:center;gap:.35rem;font-size:.57rem;color:var(--muted);margin-top:9px}
+		.sync-note svg{width:11px;height:11px}
+		.float-badge{position:absolute;display:flex;align-items:center;gap:.5rem;background:#fff;border:1px solid var(--line);border-radius:999px;padding:.5rem .8rem;box-shadow:var(--shadow);font-size:.68rem;font-weight:700;z-index:3;white-space:nowrap}
+		.float-badge .fb-ic{width:25px;height:25px;border-radius:50%;background:var(--sage);color:var(--pine);display:grid;place-items:center;flex:0 0 auto}
+		.float-badge .fb-ic svg{width:13px;height:13px}
+		.float-badge img{width:25px;height:25px;border-radius:50%;object-fit:cover}
+		.float-badge small{display:block;font-size:.56rem;color:var(--muted);font-weight:600;line-height:1.15}
+		.float-badge b{font-size:.67rem;line-height:1.2}
+		.float-badge.one{top:1.4rem;right:-.4rem}
+		.float-badge.two{bottom:.35rem;left:-1.3rem}
+		.float-badge.three{right:-1rem;bottom:4.6rem;display:none}
+		@media (max-width:575.98px){
+			.mockup-wrap{padding:.6rem 0 1.1rem;margin-inline:auto}
+			.mockup{transform:none}
+			.float-badge.one{display:none}
+			.float-badge.two{left:-.2rem;bottom:.1rem}
+		}
+
+		/* ---------- impact ---------- */
+		.impact{background:var(--pine);color:var(--cream);overflow:hidden}
+		.impact::before{content:"";position:absolute;width:680px;height:680px;right:-180px;top:-240px;border-radius:50%;background:radial-gradient(circle,rgba(233,180,76,.17),transparent 66%)}
+		.impact::after{content:"";position:absolute;width:520px;height:520px;left:-220px;bottom:-260px;border-radius:50%;background:radial-gradient(circle,rgba(201,219,190,.18),transparent 68%)}
+		.impact .container{position:relative;z-index:1}
+		.impact h2{font-size:clamp(2.2rem,4.7vw,3.85rem);line-height:1.04;margin-bottom:0}
+		.impact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:3rem;border-top:1px solid rgba(253,251,245,.16);padding-top:2rem}
+		.impact-item .num{font-family:'Fraunces',Georgia,serif;font-size:.82rem;color:var(--sage-2);letter-spacing:.1em;display:block;margin-bottom:.85rem}
+		.impact-item h3{font-size:1.22rem;margin-bottom:.4rem;color:var(--cream)}
+		.impact-item p{font-size:.88rem;line-height:1.55;color:rgba(253,251,245,.66);margin:0}
+		@media (max-width:767.98px){.impact-grid{grid-template-columns:1fr;gap:1.5rem}}
+
+		/* ---------- trust ---------- */
+		.trust{background:var(--cream)}
+		.rating{display:flex;align-items:center;gap:.7rem;margin-top:1.5rem}
+		.stars{display:flex;gap:.15rem;color:var(--clay)}
+		.stars i{font-size:.95rem}
+		.rating p{margin:0;font-size:.83rem;color:var(--muted)}
+		.rating strong{color:var(--ink)}
+		.logo-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1.3rem 2rem;margin:2.6rem 0 3.4rem;padding:1.35rem 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+		.logo-item{display:flex;align-items:center;gap:.5rem;color:var(--ink);opacity:.62;font-weight:800;letter-spacing:-.02em;font-size:.9rem;transition:opacity .2s}
+		.logo-item:hover{opacity:.95}
+		.logo-item svg{width:19px;height:19px;stroke-width:1.8}
+		.logo-item.serif{font-family:'Fraunces',Georgia,serif;font-size:1.02rem}
+		.proof-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:3rem}
+		.proof-stat{padding-right:1rem;border-left:1px solid var(--line);padding-left:1.2rem}
+		.proof-stat:first-child{border-left:0;padding-left:0}
+		.proof-stat b{display:block;font-family:'Fraunces',Georgia,serif;font-size:clamp(1.8rem,2.7vw,2.35rem);font-weight:600;letter-spacing:-.04em;line-height:1;color:var(--pine);margin-bottom:.35rem}
+		.proof-stat span{display:block;font-size:.76rem;line-height:1.4;color:var(--muted);max-width:14rem}
+		.quote-grid{display:grid;grid-template-columns:1.12fr .88fr;gap:1.15rem}
+		.quote-feature{grid-row:span 2;background:var(--pine);color:var(--cream);border-radius:var(--r-lg);padding:clamp(1.6rem,3vw,2.4rem);display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+		.quote-feature::after{content:"”";position:absolute;right:1.2rem;top:-1.6rem;font-family:'Fraunces',Georgia,serif;font-size:9rem;line-height:1;color:rgba(253,251,245,.08)}
+		.quote-feature .stars{color:var(--sun)}
+		.quote-feature blockquote{font-family:'Fraunces',Georgia,serif;font-size:clamp(1.5rem,2.4vw,2rem);line-height:1.22;letter-spacing:-.025em;margin:1.3rem 0 1.8rem;position:relative;z-index:1}
+		.quote-feature blockquote em{color:var(--sun);font-style:italic}
+		.quote-person{display:flex;align-items:center;gap:.7rem;position:relative;z-index:1}
+		.quote-person img{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid rgba(253,251,245,.22)}
+		.quote-person b{display:block;font-size:.85rem;line-height:1.2}
+		.quote-person small{display:block;font-size:.72rem;color:rgba(253,251,245,.6);margin-top:.1rem}
+		.quote-card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:1.4rem;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:.9rem}
+		.quote-card blockquote{font-size:.93rem;line-height:1.6;color:var(--ink);margin:0;flex:1}
+		.quote-card .quote-person b{color:var(--ink)}
+		.quote-card .quote-person small{color:var(--muted)}
+		.quote-card .quote-person img{width:36px;height:36px;border-color:var(--line)}
+		.quote-card .stars i{font-size:.72rem}
+		@media (max-width:991.98px){.quote-grid{grid-template-columns:1fr}.quote-feature{grid-row:auto}.proof-stats{grid-template-columns:repeat(2,1fr);gap:1.4rem}.proof-stat:nth-child(3){border-left:0;padding-left:0}}
+		@media (max-width:575.98px){.logo-row{gap:1rem 1.6rem;justify-content:flex-start}.logo-item{font-size:.8rem}.proof-stats{gap:1.2rem}}
+
+		/* ---------- empathy ---------- */
+		.empathy{background:linear-gradient(180deg,#DDE8D5 0%,#EAF1E4 58%,#E4EDDC 100%);overflow:hidden}
+		.empathy::after{content:"";position:absolute;width:440px;height:440px;right:-160px;bottom:-220px;border-radius:50%;border:1px solid rgba(18,59,47,.12)}
+		.empathy .container{position:relative;z-index:1}
+		.empathy h2{font-size:clamp(2.15rem,4.4vw,3.5rem);margin-bottom:1.2rem}
+		.empathy-photo-wrap{position:relative;padding:1.2rem 1.4rem 2.2rem .8rem}
+		.empathy-photo{width:100%;aspect-ratio:4/4.7;object-fit:cover;border-radius:46% 54% 42% 58% / 44% 40% 60% 56%;border:9px solid rgba(255,255,255,.5);box-shadow:var(--shadow);display:block}
+		.empathy-tag{position:absolute;right:0;bottom:1.2rem;background:var(--cream);border:1px solid var(--line);border-radius:18px;padding:.85rem 1rem;box-shadow:var(--shadow);display:flex;align-items:center;gap:.65rem;max-width:245px}
+		.empathy-tag .ic{width:34px;height:34px;border-radius:11px;background:var(--clay-soft);color:var(--clay);display:grid;place-items:center;flex:0 0 auto}
+		.empathy-tag .ic svg{width:17px;height:17px}
+		.empathy-tag b{display:block;font-size:.78rem;line-height:1.25}
+		.empathy-tag small{display:block;font-size:.65rem;line-height:1.3;color:var(--muted);margin-top:.12rem}
+		.empathy-copy p{max-width:38rem}
+		.empathy-lists{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.8rem}
+		.empathy-card{background:rgba(253,251,245,.58);border:1px solid rgba(255,255,255,.7);border-radius:22px;padding:1.15rem 1.2rem;backdrop-filter:blur(6px)}
+		.empathy-card h3{font-size:1.05rem;margin-bottom:.75rem;letter-spacing:-.02em}
+		.empathy-card ul{list-style:none;padding:0;margin:0;display:grid;gap:.55rem}
+		.empathy-card li{display:flex;align-items:flex-start;gap:.5rem;font-size:.82rem;line-height:1.42}
+		.empathy-card li i{flex:0 0 auto;margin-top:.15rem;font-size:.75rem}
+		.empathy-card.load li{color:var(--muted)}
+		.empathy-card.load li i{color:var(--clay)}
+		.empathy-card.deserve{background:var(--pine);color:var(--cream);border-color:var(--pine)}
+		.empathy-card.deserve h3{color:var(--cream)}
+		.empathy-card.deserve li i{color:var(--sage-2)}
+		@media (max-width:991.98px){.empathy-photo-wrap{max-width:520px;margin-inline:auto;padding:.8rem .8rem 1.8rem}.empathy-photo{aspect-ratio:4/3.4}.empathy-tag{right:.2rem;bottom:.4rem}}
+		@media (max-width:575.98px){.empathy-lists{grid-template-columns:1fr}.empathy-tag{position:static;margin-top:1rem;max-width:none}}
+
+		/* ---------- pain ---------- */
+		.pain{background:var(--paper)}
+		.pain-grid{display:grid;grid-template-columns:minmax(260px,.88fr) 1.12fr;gap:clamp(1.5rem,4vw,3rem);align-items:start;margin-top:2.5rem}
+		.chat-card{background:#fff;border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);overflow:hidden;max-width:410px;transform:rotate(-1.2deg)}
+		.chat-head{background:var(--pine);color:var(--cream);padding:.9rem 1.05rem;display:flex;align-items:center;gap:.65rem}
+		.chat-head .chat-ic{width:34px;height:34px;border-radius:11px;background:rgba(253,251,245,.14);display:grid;place-items:center;flex:0 0 auto}
+		.chat-head .chat-ic svg{width:17px;height:17px}
+		.chat-head b{display:block;font-size:.78rem;line-height:1.2}
+		.chat-head small{display:block;font-size:.62rem;color:rgba(253,251,245,.55);margin-top:.08rem}
+		.chat-head .unread{margin-left:auto;background:var(--clay);color:#fff;font-size:.58rem;font-weight:800;border-radius:999px;padding:.18rem .45rem}
+		.chat-body{padding:1rem;background:linear-gradient(180deg,#FDFBF5,#F3ECDD);display:grid;gap:.6rem}
+		.chat-day{text-align:center;font-size:.57rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);margin:.1rem 0 .2rem}
+		.bubble{max-width:88%;border-radius:15px;padding:.55rem .7rem;font-size:.76rem;line-height:1.4;box-shadow:0 1px 2px rgba(20,37,30,.04)}
+		.bubble.them{background:#fff;border:1px solid var(--line);border-bottom-left-radius:5px}
+		.bubble.me{background:var(--pine);color:var(--cream);margin-left:auto;border-bottom-right-radius:5px}
+		.bubble.alert{background:var(--clay-soft);border:1px solid #E8C2B2;color:#712E17;border-bottom-left-radius:5px;font-weight:700}
+		.bubble b{color:var(--clay-2)}
+		.bubble .who{display:block;font-size:.56rem;font-weight:800;color:var(--muted-2);margin-bottom:.1rem}
+		.bubble.me .who{color:rgba(253,251,245,.5)}
+		.chat-typing{display:flex;align-items:center;gap:.3rem;font-size:.62rem;color:var(--muted);padding:.2rem .1rem}
+		.chat-typing .dots{display:flex;gap:2px}
+		.chat-typing .dots i{width:4px;height:4px;border-radius:50%;background:var(--muted-2);display:block}
+		.pain-cards{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+		.pain-card{background:var(--cream);border:1px solid var(--line);border-radius:22px;padding:1.3rem 1.25rem;box-shadow:var(--shadow-sm);transition:transform .25s,box-shadow .25s}
+		.pain-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+		.pain-card .ic{width:38px;height:38px;border-radius:12px;background:var(--clay-soft);color:var(--clay);display:grid;place-items:center;margin-bottom:.9rem}
+		.pain-card .ic svg{width:18px;height:18px}
+		.pain-card h3{font-size:1.02rem;margin-bottom:.4rem}
+		.pain-card p{font-size:.82rem;line-height:1.5;color:var(--muted);margin:0}
+		.shift-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.9rem 1.5rem;background:var(--pine);color:var(--cream);border-radius:20px;padding:1rem 1.35rem;margin-top:2.2rem}
+		.shift-side{display:flex;align-items:center;gap:.6rem;font-size:.8rem;line-height:1.35}
+		.shift-side .ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:0 0 auto}
+		.shift-side.before .ic{background:rgba(198,95,62,.22);color:#F0A990}
+		.shift-side.after .ic{background:rgba(201,219,190,.16);color:var(--sage-2)}
+		.shift-side .ic svg{width:15px;height:15px}
+		.shift-side b{display:block;font-size:.85rem;color:var(--cream)}
+		.shift-side small{display:block;font-size:.7rem;color:rgba(253,251,245,.58);margin-top:.08rem}
+		.shift-arrow{color:var(--sage-2);opacity:.65}
+		@media (max-width:991.98px){.pain-grid{grid-template-columns:1fr}.chat-card{margin-inline:auto;transform:none}.shift-bar{border-radius:18px}}
+		@media (max-width:575.98px){.pain-cards{grid-template-columns:1fr}.shift-arrow{display:none}}
+
+		/* ---------- authority / bento ---------- */
+		.authority{background:var(--cream)}
+		.cred-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.5rem}
+		.cred{display:inline-flex;align-items:center;gap:.4rem;background:var(--sage);border:1px solid rgba(18,59,47,.08);border-radius:999px;padding:.42rem .8rem;font-size:.75rem;font-weight:800;color:var(--pine)}
+		.cred svg{width:14px;height:14px}
+		.bento{display:grid;grid-template-columns:repeat(12,1fr);gap:1.1rem;margin-top:2.6rem}
+		.bento-card{background:var(--paper);border:1px solid var(--line);border-radius:28px;padding:clamp(1.25rem,2.2vw,1.8rem);display:flex;flex-direction:column;gap:.65rem;position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s}
+		.bento-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+		.bento-card.span-7{grid-column:span 7}
+		.bento-card.span-5{grid-column:span 5}
+		.bento-card .icon-badge{width:42px;height:42px;border-radius:13px;background:var(--sage);color:var(--pine);display:grid;place-items:center;flex:0 0 auto}
+		.bento-card .icon-badge svg{width:20px;height:20px}
+		.bento-card h3{font-size:1.28rem;margin:0;letter-spacing:-.025em}
+		.bento-card>p{font-size:.87rem;line-height:1.55;color:var(--muted);margin:0;max-width:46ch}
+		.bento-visual{margin-top:auto;padding-top:1rem}
+		.mini-panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:.55rem .65rem;box-shadow:var(--shadow-sm)}
+		.ms-row{display:flex;align-items:center;gap:.55rem;padding:.4rem .3rem;border-top:1px solid rgba(20,37,30,.07)}
+		.ms-row:first-child{border-top:0}
+		.ms-check{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto;font-size:.6rem;background:var(--pine);color:#fff}
+		.ms-check.due{border:1.5px dashed var(--clay);background:transparent;color:var(--clay)}
+		.ms-info{flex:1;min-width:0}
+		.ms-info b{display:block;font-size:.72rem;line-height:1.2}
+		.ms-info small{display:block;font-size:.58rem;line-height:1.3;color:var(--muted);margin-top:.06rem}
+		.ms-tag{font-size:.56rem;font-weight:800;color:var(--pine);background:var(--sage);border-radius:999px;padding:.18rem .45rem;white-space:nowrap}
+		.ms-tag.pending{color:var(--clay);background:var(--clay-soft)}
+		.doc-row{display:flex;align-items:center;gap:.55rem;padding:.45rem .3rem;border-top:1px solid rgba(20,37,30,.07)}
+		.doc-row:first-child{border-top:0}
+		.doc-ic{width:28px;height:28px;border-radius:8px;background:var(--paper-2);color:var(--pine);display:grid;place-items:center;flex:0 0 auto}
+		.doc-ic svg{width:14px;height:14px}
+		.doc-info{flex:1;min-width:0}
+		.doc-info b{display:block;font-size:.68rem;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+		.doc-info small{display:block;font-size:.56rem;color:var(--muted);margin-top:.05rem}
+		.doc-row>i{font-size:.7rem;color:var(--pine)}
+		.toxic-box{background:#fff;border:1px solid var(--line);border-radius:16px;padding:.7rem;box-shadow:var(--shadow-sm)}
+		.toxic-form{display:flex;gap:.4rem}
+		.toxic-form input{flex:1;min-width:0;border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:.5rem .8rem;font-size:.76rem;font-family:inherit;color:var(--ink)}
+		.toxic-form input::placeholder{color:var(--muted-2)}
+		.toxic-form input:focus{outline:2px solid var(--sage-3);outline-offset:1px;border-color:var(--sage-3)}
+		.toxic-form button{border:0;background:var(--pine);color:var(--cream);border-radius:999px;padding:.5rem .8rem;font-size:.72rem;font-weight:800;display:inline-flex;align-items:center;gap:.3rem;white-space:nowrap}
+		.toxic-form button svg{width:13px;height:13px}
+		.toxic-chips{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.5rem}
+		.toxic-chip{border:1px solid var(--line);background:var(--paper);color:var(--muted);border-radius:999px;padding:.18rem .5rem;font-size:.61rem;font-weight:700;font-family:inherit;transition:background .15s,color .15s}
+		.toxic-chip:hover{background:var(--sage);color:var(--pine)}
+		.toxic-result{margin-top:.55rem;min-height:1.4rem}
+		.toxic-hint{font-size:.62rem;color:var(--muted);line-height:1.4;margin:0}
+		.toxic-card{display:flex;align-items:flex-start;gap:.5rem;border-radius:11px;padding:.55rem .6rem;font-size:.65rem;line-height:1.4}
+		.toxic-card .tc-ic{flex:0 0 auto;margin-top:.1rem}
+		.toxic-card .tc-ic svg{width:14px;height:14px}
+		.toxic-card strong{display:block;font-size:.7rem;margin-bottom:.08rem}
+		.toxic-card p{margin:0;font-size:.62rem}
+		.toxic-card small{display:block;margin-top:.18rem;font-size:.57rem;opacity:.78}
+		.toxic-danger{background:#FBE5DA;color:#762B14}
+		.toxic-caution{background:#FBF0D3;color:#63460F}
+		.toxic-safe{background:#DFF0E2;color:#185130}
+		.alert-card{background:linear-gradient(145deg,#F6DED2,#FAEDE6);border:1px solid #E9C3B3;border-radius:16px;padding:.8rem;position:relative;overflow:hidden}
+		.alert-card .alert-top{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem}
+		.alert-card .alert-ic{width:30px;height:30px;border-radius:9px;background:var(--clay);color:#fff;display:grid;place-items:center;flex:0 0 auto}
+		.alert-card .alert-ic svg{width:15px;height:15px}
+		.alert-card .alert-top b{font-size:.72rem;line-height:1.2;display:block;color:#6E2A13}
+		.alert-card .alert-top small{font-size:.56rem;color:#8C4B35;display:block;margin-top:.05rem}
+		.alert-card p{font-size:.62rem;line-height:1.4;color:#7B3A24;margin:0 0 .55rem}
+		.alert-foot{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+		.alert-avatars{display:flex}
+		.alert-avatars img,.alert-avatars span{width:22px;height:22px;border-radius:50%;object-fit:cover;border:1.5px solid #F7E4DC;margin-left:-6px}
+		.alert-avatars img:first-child,.alert-avatars span:first-child{margin-left:0}
+		.alert-avatars span{background:var(--clay);color:#fff;display:grid;place-items:center;font-size:.5rem;font-weight:800}
+		.alert-btn{font-size:.57rem;font-weight:800;background:var(--pine);color:var(--cream);border-radius:999px;padding:.25rem .55rem;white-space:nowrap}
+		.extras-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.1rem}
+		.extra-pill{display:inline-flex;align-items:center;gap:.4rem;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:.45rem .8rem;font-size:.73rem;font-weight:700;color:var(--muted)}
+		.extra-pill svg{width:14px;height:14px;color:var(--pine)}
+		@media (max-width:991.98px){.bento-card.span-7,.bento-card.span-5{grid-column:span 12}}
+		@media (max-width:575.98px){.bento{gap:.85rem}.bento-card{border-radius:22px}}
+
+		/* ---------- audience ---------- */
+		.audience{background:var(--pine-2);color:var(--cream);overflow:hidden}
+		.audience::before{content:"";position:absolute;width:700px;height:700px;left:50%;top:-360px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle,rgba(201,219,190,.14),transparent 66%)}
+		.audience .container{position:relative;z-index:1}
+		.audience h2{color:var(--cream)}
+		.aud-tabs{display:flex;flex-wrap:wrap;gap:.5rem;margin:2.2rem 0 1.6rem}
+		.aud-tab{display:inline-flex;align-items:center;gap:.5rem;background:transparent;border:1px solid rgba(253,251,245,.22);color:rgba(253,251,245,.7);border-radius:999px;padding:.68rem 1.05rem;font-size:.85rem;font-weight:700;font-family:inherit;transition:background .2s,color .2s,border-color .2s}
+		.aud-tab svg{width:16px;height:16px}
+		.aud-tab:hover{border-color:rgba(253,251,245,.5);color:var(--cream)}
+		.aud-tab.is-active{background:var(--cream);border-color:var(--cream);color:var(--pine)}
+		.aud-tab .tag{font-size:.56rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:rgba(233,180,76,.22);color:var(--sun);border-radius:999px;padding:.15rem .4rem}
+		.aud-tab.is-active .tag{background:var(--clay-soft);color:var(--clay-2)}
+		.aud-panel{background:var(--cream);color:var(--ink);border-radius:32px;padding:clamp(1.4rem,3vw,2.6rem);min-height:360px}
+		.aud-panel.is-loading{opacity:.55;transition:opacity .15s}
+		.aud-inner{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(1.5rem,3.5vw,3rem);align-items:center}
+		.aud-badges{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin-bottom:1rem}
+		.aud-badge{display:inline-flex;align-items:center;gap:.35rem;background:var(--sage);color:var(--pine);border-radius:999px;padding:.3rem .65rem;font-size:.66rem;font-weight:800;letter-spacing:.03em}
+		.aud-badge.beta{background:var(--clay-soft);color:var(--clay-2)}
+		.aud-badge svg{width:13px;height:13px}
+		.aud-for{font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--clay);margin-bottom:.4rem}
+		.aud-inner h3{font-size:clamp(1.7rem,3vw,2.3rem);margin-bottom:.6rem}
+		.aud-inner>div>p{font-size:.92rem;line-height:1.6;color:var(--muted);max-width:38rem}
+		.aud-list{list-style:none;padding:0;margin:1.1rem 0 1.5rem;display:grid;gap:.55rem}
+		.aud-list li{display:flex;align-items:flex-start;gap:.55rem;font-size:.86rem;line-height:1.45}
+		.aud-list li b{font-weight:800}
+		.aud-list .tick{width:19px;height:19px;border-radius:50%;background:var(--pine);color:var(--cream);display:grid;place-items:center;flex:0 0 auto;margin-top:.12rem}
+		.aud-list .tick svg{width:11px;height:11px;stroke-width:3}
+		.aud-visual{background:var(--paper-2);border-radius:24px;padding:clamp(1rem,2vw,1.4rem);transform:rotate(1.4deg)}
+		.brief-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:1rem;box-shadow:var(--shadow-sm)}
+		.brief-head{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin-bottom:.7rem;padding-bottom:.65rem;border-bottom:1px solid var(--line)}
+		.brief-head b{font-family:'Fraunces',Georgia,serif;font-size:1rem;letter-spacing:-.02em}
+		.brief-head span{font-size:.6rem;font-weight:800;color:var(--pine);background:var(--sage);border-radius:999px;padding:.2rem .5rem}
+		.brief-row{display:flex;align-items:flex-start;gap:.55rem;padding:.42rem 0;border-top:1px solid rgba(20,37,30,.06)}
+		.brief-row:first-of-type{border-top:0}
+		.brief-row .ic{width:26px;height:26px;border-radius:8px;background:var(--paper);color:var(--pine);display:grid;place-items:center;flex:0 0 auto}
+		.brief-row .ic svg{width:13px;height:13px}
+		.brief-row b{display:block;font-size:.72rem;line-height:1.25}
+		.brief-row small{display:block;font-size:.6rem;color:var(--muted);margin-top:.08rem;line-height:1.35}
+		.brief-foot{display:flex;align-items:center;gap:.4rem;margin-top:.7rem;font-size:.58rem;color:var(--muted)}
+		.brief-foot svg{width:12px;height:12px;color:var(--pine)}
+		@media (max-width:767.98px){.aud-inner{grid-template-columns:1fr}.aud-visual{transform:none}}
+
+		/* ---------- steps ---------- */
+		.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:3rem;position:relative}
+		.step{background:var(--cream);border:1px solid var(--line);border-radius:26px;padding:1.6rem 1.5rem;position:relative;overflow:hidden}
+		.step .step-num{font-family:'Fraunces',Georgia,serif;font-size:.8rem;font-weight:700;letter-spacing:.14em;color:var(--clay);display:block;margin-bottom:1.1rem}
+		.step .step-ic{width:46px;height:46px;border-radius:15px;background:var(--pine);color:var(--sage);display:grid;place-items:center;margin-bottom:1.1rem}
+		.step .step-ic svg{width:22px;height:22px}
+		.step h3{font-size:1.18rem;margin-bottom:.45rem}
+		.step p{font-size:.85rem;line-height:1.55;color:var(--muted);margin:0}
+		.step::after{content:"";position:absolute;right:-1px;top:2.4rem;width:1px;height:40%;background:linear-gradient(180deg,transparent,var(--line),transparent)}
+		.step:last-child::after{display:none}
+		@media (max-width:991.98px){.steps{grid-template-columns:1fr}.step::after{display:none}}
+
+		/* ---------- action ---------- */
+		.action{background:var(--paper)}
+		.action-card{background:var(--pine);color:var(--cream);border-radius:36px;overflow:hidden;display:grid;grid-template-columns:1.18fr .82fr;position:relative;box-shadow:var(--shadow-lg)}
+		.action-card::before{content:"";position:absolute;width:420px;height:420px;left:-140px;top:-180px;border-radius:50%;background:radial-gradient(circle,rgba(233,180,76,.16),transparent 68%);pointer-events:none}
+		.action-content{padding:clamp(1.8rem,4.5vw,3.8rem);position:relative;z-index:1}
+		.action-content h2{color:var(--cream);font-size:clamp(2rem,4vw,3.1rem);margin-bottom:1rem}
+		.action-content p{color:rgba(253,251,245,.72);font-size:.98rem;line-height:1.62;max-width:34rem}
+		.action-form{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:1.6rem;max-width:520px}
+		.action-form .form-control{flex:1 1 240px;border:1px solid transparent;border-radius:999px;background:rgba(253,251,245,.97);color:var(--ink);padding:.85rem 1.2rem;font-size:.92rem;font-family:inherit;height:auto}
+		.action-form .form-control::placeholder{color:var(--muted-2)}
+		.action-form .form-control:focus{background:#fff;border-color:var(--sun);box-shadow:0 0 0 .22rem rgba(233,180,76,.32)}
+		.action-note{margin-top:.9rem;font-size:.76rem;color:rgba(253,251,245,.6);display:flex;align-items:center;gap:.4rem}
+		.action-note svg{width:14px;height:14px;color:var(--sage-2);flex:0 0 auto}
+		.form-note{margin-top:.85rem;border-radius:14px;padding:.7rem .9rem;font-size:.82rem;line-height:1.45;display:flex;align-items:flex-start;gap:.5rem}
+		.form-note svg{width:16px;height:16px;flex:0 0 auto;margin-top:.1rem}
+		.form-note-ok{background:rgba(201,219,190,.16);color:#DCEBd2;border:1px solid rgba(201,219,190,.3)}
+		.form-note-ok svg{color:var(--sage-2)}
+		.form-note-error{background:rgba(198,95,62,.18);color:#F6CFC0;border:1px solid rgba(240,169,144,.35)}
+		.form-note-error svg{color:#F0A990}
+		.form-note b{display:block;color:inherit}
+		.action-secondary{margin-top:1.7rem;padding-top:1.4rem;border-top:1px solid rgba(253,251,245,.16);font-size:.85rem;color:rgba(253,251,245,.7)}
+		.action-secondary a{color:var(--sun);font-weight:800;text-decoration:none;border-bottom:1px solid rgba(233,180,76,.4)}
+		.action-secondary a:hover{border-bottom-color:var(--sun)}
+		.action-media{position:relative;min-height:100%}
+		.action-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+		.action-media::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--pine) 0%,rgba(18,59,47,.35) 42%,rgba(18,59,47,0) 100%)}
+		.action-tag{position:absolute;left:1.2rem;bottom:1.2rem;z-index:2;background:rgba(253,251,245,.93);color:var(--ink);border-radius:16px;padding:.6rem .8rem;font-size:.68rem;font-weight:700;box-shadow:var(--shadow);max-width:230px;line-height:1.35}
+		.action-tag span{display:block;font-size:.6rem;color:var(--muted);margin-top:.12rem}
+		@media (max-width:991.98px){.action-card{grid-template-columns:1fr}.action-media{min-height:280px;order:2}.action-media::after{background:linear-gradient(180deg,rgba(18,59,47,.55) 0%,rgba(18,59,47,0) 55%)}}
+
+		/* ---------- footer ---------- */
+		.site-footer{background:var(--paper);border-top:1px solid var(--line);padding:clamp(2.5rem,5vw,3.5rem) 0 1.5rem}
+		.footer-top{display:grid;grid-template-columns:1.5fr .8fr .8fr;gap:2rem;padding-bottom:2rem;border-bottom:1px solid var(--line)}
+		.footer-brand p{font-size:.85rem;color:var(--muted);max-width:26rem;margin-top:.9rem;line-height:1.55}
+		.footer-col h4{font-family:'Manrope',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-bottom:1rem}
+		.footer-col ul{list-style:none;padding:0;margin:0;display:grid;gap:.55rem}
+		.footer-col a{font-size:.85rem;font-weight:600;color:var(--ink);text-decoration:none}
+		.footer-col a:hover{color:var(--clay)}
+		.footer-bottom{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.8rem;padding-top:1.4rem;font-size:.75rem;color:var(--muted-2)}
+		.footer-bottom .made{display:flex;align-items:center;gap:.35rem}
+		@media (max-width:767.98px){.footer-top{grid-template-columns:1fr 1fr;gap:1.6rem}.footer-brand{grid-column:span 2}}
+
+		/* ---------- motion ---------- */
+		.js .reveal{transition:opacity .7s cubic-bezier(.2,.7,.3,1),transform .7s cubic-bezier(.2,.7,.3,1)}
+		.js .reveal.is-hidden{opacity:0;transform:translateY(20px)}
+		.js .reveal.is-hidden.is-in{opacity:1;transform:none}
+		.js .reveal[data-delay="1"]{transition-delay:.09s}
+		.js .reveal[data-delay="2"]{transition-delay:.18s}
+		.js .reveal[data-delay="3"]{transition-delay:.27s}
+		@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+		.float-badge.one{animation:floaty 6s ease-in-out infinite}
+		.float-badge.two{animation:floaty 7.5s ease-in-out infinite .8s}
+		@media (prefers-reduced-motion:reduce){
+			html{scroll-behavior:auto}
+			.js .reveal{opacity:1;transform:none;transition:none}
+			.float-badge{animation:none}
+			.btn:hover,.pain-card:hover,.bento-card:hover{transform:none}
+		}
+	</style>
+</head>
+<body>
+	<a class="skip-link" href="#main">Skip to content</a>
+	<div class="scroll-progress" aria-hidden="true"><span id="scrollBar"></span></div>
+
+	<!-- ============ NAV ============ -->
+	<header class="site-nav" id="siteNav">
+		<div class="container">
+			<nav class="navbar navbar-expand-lg p-0">
+				<a class="brand" href="#top" aria-label="OmniPaw home">
+					<span class="brand-mark"><i data-lucide="paw-print"></i></span>
+					<span class="brand-name">Omni<b>Paw</b></span>
+				</a>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+					<i class="bi bi-list"></i>
+				</button>
+				<div class="collapse navbar-collapse" id="mainNav">
+					<ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+						<li class="nav-item"><a class="nav-link" href="#impact">Why OmniPaw</a></li>
+						<li class="nav-item"><a class="nav-link" href="#trust">Loved by care teams</a></li>
+						<li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+						<li class="nav-item"><a class="nav-link" href="#platform">For your circle</a></li>
+						<li class="nav-item"><a class="nav-link" href="#how">How it works</a></li>
+					</ul>
+					<div class="nav-actions">
+						<a class="nav-signin" href="#top">Sign in</a>
+						<a class="btn btn-clay" href="#start">Start free <i class="bi bi-arrow-right"></i></a>
+					</div>
+				</div>
+			</nav>
+		</div>
+	</header>
+
+	<main id="main">
+		<!-- ============ HERO ============ -->
+		<section class="hero" id="top">
+			<div class="container">
+				<div class="row align-items-center g-5 g-xl-5">
+					<div class="col-lg-6">
+						<p class="hero-eyebrow reveal"><span class="dot"><i data-lucide="paw-print"></i></span> Shared pet care, finally in sync <span class="sep">·</span> Free to start</p>
+						<h1 class="reveal" data-delay="1">One pet. Many hands. <span class="hl">Zero guesswork.</span></h1>
+						<p class="hero-sub reveal" data-delay="2">OmniPaw is the shared care hub for everyone who loves your pet. Meals, medications, health records, and emergency details live in one calm place &mdash; so care never depends on who remembered what.</p>
+						<div class="hero-cta reveal" data-delay="3">
+							<a class="btn btn-clay" href="#start">Start your pet's care hub <i class="bi bi-arrow-right"></i></a>
+							<a class="btn btn-outline-ink" href="#how">See how it works</a>
+						</div>
+						<p class="hero-micro reveal" data-delay="3">
+							<span><i class="bi bi-check2-circle"></i> Free for your first pet</span>
+							<span><i class="bi bi-check2-circle"></i> Set up in 4 minutes</span>
+							<span><i class="bi bi-check2-circle"></i> No card required</span>
+						</p>
+						<div class="hero-proof reveal" data-delay="3">
+							<div class="avatar-stack">
+								<img src="https://i.pravatar.cc/64?img=47" alt="" loading="lazy">
+								<img src="https://i.pravatar.cc/64?img=12" alt="" loading="lazy">
+								<img src="https://i.pravatar.cc/64?img=32" alt="" loading="lazy">
+								<span class="avatar-more">12k</span>
+							</div>
+							<p><strong>12,000+ pet families</strong><br>already share care the calm way.</p>
+						</div>
+					</div>
+
+					<div class="col-lg-6">
+						<div class="mockup-wrap reveal" data-delay="2">
+							<div class="mockup">
+								<div class="mockup-screen">
+									<div class="app-bar">
+										<span class="app-id"><span class="mark"><i data-lucide="paw-print"></i></span> OmniPaw</span>
+										<span class="live-pill"><span class="dot"></span> LIVE SYNC</span>
+									</div>
+									<div class="pet-strip">
+										<img src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=160&q=80" alt="Luna, a golden retriever">
+										<div class="pet-meta">
+											<h3>Luna</h3>
+											<p>Golden Retriever · 4 yrs · 28.4 kg</p>
+										</div>
+										<div class="pet-team">
+											<div class="avatar-stack">
+												<img src="https://i.pravatar.cc/48?img=47" alt="" loading="lazy">
+												<img src="https://i.pravatar.cc/48?img=15" alt="" loading="lazy">
+												<img src="https://i.pravatar.cc/48?img=32" alt="" loading="lazy">
+												<span class="avatar-more">+2</span>
+											</div>
+										</div>
+									</div>
+
+									<div class="care-card">
+										<div class="care-card-head"><span>Today's care</span><span>3 of 5 done</span></div>
+										<div class="care-progress"><b></b></div>
+
+										<div class="task done">
+											<span class="task-check"><i class="bi bi-check-lg"></i></span>
+											<span class="task-info"><b>Breakfast</b><small>8:00 AM · 1 cup, salmon</small></span>
+											<span class="task status">Given by Maya</span>
+										</div>
+										<div class="task done">
+											<span class="task-check"><i class="bi bi-check-lg"></i></span>
+											<span class="task-info"><b>Morning walk</b><small>8:40 AM · 25 min</small></span>
+											<span class="task status">Done by Ben</span>
+										</div>
+										<div class="task due">
+											<span class="task-check"><i data-lucide="pill"></i></span>
+											<span class="task-info"><b>Apoquel 16 mg</b><small>Due 12:30 PM · with food</small></span>
+											<span class="task-pill">Mark given</span>
+										</div>
+										<div class="task next">
+											<span class="task-check"><i data-lucide="utensils"></i></span>
+											<span class="task-info"><b>Dinner</b><small>6:00 PM · 1 cup, salmon</small></span>
+											<span class="task status">Up next</span>
+										</div>
+									</div>
+
+									<div class="emergency">
+										<span class="ic"><i data-lucide="siren"></i></span>
+										<span class="txt"><b>Emergency card</b><small>Dr. Lena Ortiz · Northside Vet · 0.8 mi</small></span>
+										<span class="call"><i data-lucide="phone"></i></span>
+									</div>
+									<div class="sync-note"><i data-lucide="refresh-cw"></i> Synced across 4 caregivers · just now</div>
+								</div>
+							</div>
+
+							<div class="float-badge one">
+								<span class="fb-ic"><i data-lucide="shield-check"></i></span>
+								<span><b>Care team synced</b><small>Everyone sees the same plan</small></span>
+							</div>
+							<div class="float-badge two">
+								<img src="https://i.pravatar.cc/48?img=32" alt="" loading="lazy">
+								<span><b>Priya checked in</b><small>Sitter · 4:12 PM</small></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ============ 01 IMPACT ============ -->
+		<section class="section impact on-dark" id="impact">
+			<div class="container">
+				<div class="row g-4 g-lg-5 align-items-end">
+					<div class="col-lg-7 reveal">
+						<span class="eyebrow">01 &mdash; Impact</span>
+						<h2>The best care isn't one person doing everything. It's everyone knowing <span class="hl">what to do next.</span></h2>
+					</div>
+					<div class="col-lg-5 reveal" data-delay="1">
+						<p class="lede mb-0">OmniPaw replaces the mental checklist, the group-chat archaeology, and the &ldquo;i thought you did it&rdquo; moments with one live source of truth. Less admin. More tail wags.</p>
+					</div>
+				</div>
+				<div class="impact-grid">
+					<div class="impact-item reveal">
+						<span class="num">A · CLARITY</span>
+						<h3>Same plan, same page</h3>
+						<p>Every caregiver sees the same schedule, updated the moment something changes.</p>
+					</div>
+					<div class="impact-item reveal" data-delay="1">
+						<span class="num">B · CONTINUITY</span>
+						<h3>Care never resets</h3>
+						<p>When someone new steps in, the full picture steps in with them &mdash; no re-explaining.</p>
+					</div>
+					<div class="impact-item reveal" data-delay="2">
+						<span class="num">C · CONFIDENCE</span>
+						<h3>Answers, always close</h3>
+						<p>Records, medications, and emergency details are one tap away when it matters most.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ============ 02 TRUST ============ -->
+		<section class="section trust" id="trust">
+			<div class="container">
+				<div class="row g-4 align-items-end">
+					<div class="col-lg-8 reveal">
+						<span class="eyebrow">02 &mdash; Trust</span>
+						<h2>The people who care for pets, <span class="hl">care about OmniPaw.</span></h2>
+						<div class="rating">
+							<span class="stars" aria-label="Rated 4.9 out of 5">
+								<i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+							</span>
+							<p><strong>4.9 out of 5</strong> from 2,300+ caregivers, sitters &amp; facilities</p>
+						</div>
+					</div>
+					<div class="col-lg-4 reveal" data-delay="1">
+						<p class="mb-0 muted">From solo pet parents to full boarding teams, OmniPaw is built on a simple promise: care should be easier to share.</p>
+					</div>
+				</div>
+
+				<div class="logo-row reveal" aria-label="Teams using OmniPaw">
+					<span class="logo-item"><i data-lucide="dog"></i> PawHaven Boarding</span>
+					<span class="logo-item"><i data-lucide="heart-handshake"></i> GoodDog Collective</span>
+					<span class="logo-item serif"><i data-lucide="stethoscope"></i> Vet &amp; Co.</span>
+					<span class="logo-item"><i data-lucide="cat"></i> Muddy Paws Rescue</span>
+					<span class="logo-item"><i data-lucide="bone"></i> Hound &amp; Home</span>
+					<span class="logo-item serif"><i data-lucide="paw-print"></i> The Pet Sitter Club</span>
+				</div>
+
+				<div class="proof-stats">
+					<div class="proof-stat reveal"><b>28k+</b><span>care updates shared across OmniPaw every week</span></div>
+					<div class="proof-stat reveal" data-delay="1"><b>96%</b><span>of care handoffs completed on schedule</span></div>
+					<div class="proof-stat reveal" data-delay="2"><b>12k+</b><span>households coordinating care in one place</span></div>
+					<div class="proof-stat reveal" data-delay="3"><b>4 min</b><span>average time to set up a pet profile</span></div>
+				</div>
+
+				<div class="quote-grid">
+					<figure class="quote-feature reveal mb-0">
+						<span class="stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></span>
+						<blockquote>I stopped being the only person who knew how to care for my dog. <em>That changed everything.</em></blockquote>
+						<figcaption class="quote-person">
+							<img src="https://i.pravatar.cc/96?img=45" alt="" loading="lazy">
+							<span><b>Elise &amp; Biscuit</b><small>Two-caregiver household, Portland</small></span>
+						</figcaption>
+					</figure>
+
+					<figure class="quote-card reveal mb-0" data-delay="1">
+						<span class="stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></span>
+						<blockquote>&ldquo;The first app that made me feel like I had backup. I can leave for a weekend and know exactly what Luna has eaten, taken, and done.&rdquo;</blockquote>
+						<figcaption class="quote-person">
+							<img src="https://i.pravatar.cc/80?img=47" alt="" loading="lazy">
+							<span><b>Maya R.</b><small>Luna's mom · Brooklyn</small></span>
+						</figcaption>
+					</figure>
+
+					<figure class="quote-card reveal mb-0" data-delay="2">
+						<span class="stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></span>
+						<blockquote>&ldquo;Before OmniPaw, every new client meant twenty questions. Now I get the full care brief before the first walk &mdash; meds, quirks, vet, everything.&rdquo;</blockquote>
+						<figcaption class="quote-person">
+							<img src="https://i.pravatar.cc/80?img=32" alt="" loading="lazy">
+							<span><b>Priya S.</b><small>Professional sitter · 6 years</small></span>
+						</figcaption>
+					</figure>
+				</div>
+			</div>
+		</section>
+
+		<!-- ============ 03 EMPATHY ============ -->
+		<section class="section empathy" id="empathy">
+			<div class="container">
+				<div class="row g-5 align-items-center">
+					<div class="col-lg-5">
+						<div class="empathy-photo-wrap reveal">
+							<img class="empathy-photo" src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?auto=format&fit=crop&w=900&q=80" alt="A caregiver relaxing with their dog" loading="lazy">
+							<div class="empathy-tag">
+								<span class="ic"><i data-lucide="heart"></i></span>
+								<span><b>You deserve backup</b><small>Not another app that becomes a chore.</small></span>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-7 empathy-copy">
+						<span class="eyebrow reveal">03 &mdash; Empathy</span>
+						<h2 class="reveal" data-delay="1">You're not disorganized. You're carrying <span class="hl">a whole life in your head.</span></h2>
+						<p class="lede reveal" data-delay="2">You remember the pill at 8, the vet at 3, the fact that she hates the harness, and the one food that upsets her stomach. You are the keeper of a thousand tiny details &mdash; and you love her too much to drop one.</p>
+						<div class="empathy-lists">
+							<div class="empathy-card load reveal">
+								<h3>The invisible load</h3>
+								<ul>
+									<li><i class="bi bi-dash-lg"></i> Repeating the same instructions</li>
+									<li><i class="bi bi-dash-lg"></i> Double-checking whether it was done</li>
+									<li><i class="bi bi-dash-lg"></i> Feeling guilty for needing help</li>
+									<li><i class="bi bi-dash-lg"></i> Being the only one who knows</li>
+								</ul>
+							</div>
+							<div class="empathy-card deserve reveal" data-delay="1">
+								<h3>What you actually deserve</h3>
+								<ul>
+									<li><i class="bi bi-check-lg"></i> A care plan everyone can see</li>
+									<li><i class="bi bi-check-lg"></i> A quiet confirmation, not a check-in text</li>
+									<li><i class="bi bi-check-lg"></i> To hand off without the guilt</li>
+									<li><i class="bi bi-check-lg"></i> To be present &mdash; not on call</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ============ 04 PAIN ============ -->
+		<section class="section pain" id="pain">
+			<div class="container">
+				<div class="row g-4 align-items-end">
+					<div class="col-lg-8 reveal">
+						<span class="eyebrow">04 &mdash; Pain</span>
+						<h2>The problem isn't that you don't care. It's that <span class="hl">care lives in fourteen places.</span></h2>
+					</div>
+					<div class="col-lg-4 reveal" data-delay="1">
+						<p class="mb-0 muted">A group chat here, a notes app there, a photo of a vaccination card somewhere in your camera roll. Shared care gets lost in the gaps between tools.</p>
+					</div>
+				</div>
+
+				<div class="pain-grid">
+					<div class="reveal">
+						<div class="chat-card">
+							<div class="chat-head">
+								<span class="chat-ic"><i data-lucide="messages-square"></i></span>
+								<span><b>Family &amp; sitters</b><small>6 people · 3 dogs, 1 horse</small></span>
+								<span class="unread">14 unread</span>
+							</div>
+							<div class="chat-body">
+								<p class="chat-day">Last night, 9:47 PM</p>
+								<div class="bubble them"><span class="who">Dad</span>Did anyone give Luna her evening pill?</div>
+								<div class="bubble me"><span class="who">Maya</span>I thought you did?</div>
+								<div class="bubble them"><span class="who">Dad</span>No &mdash; I did breakfast. Where's the injection log again?</div>
+								<div class="bubble alert"><span class="who">Priya (sitter)</span>Also &mdash; what's the vet's number if she starts limping? <b>I can't find it.</b></div>
+								<div class="bubble them"><span class="who">Maya</span>Ugh. It's in an email from 2023. I'll look when I'm home.</div>
+								<div class="chat-typing"><span class="dots"><i></i><i></i><i></i></span> Someone is typing&hellip;</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="pain-cards">
+						<div class="pain-card reveal">
+							<span class="ic"><i data-lucide="message-circle-off"></i></span>
+							<h3>The group-chat black hole</h3>
+							<p>Instructions get buried under memes, links, and &ldquo;ok&rdquo;. Important details disappear by morning.</p>
+						</div>
+						<div class="pain-card reveal" data-delay="1">
+							<span class="ic"><i data-lucide="pill"></i></span>
+							<h3>The double-dose gamble</h3>
+							<p>Who gave the 8am pill? Nobody's sure &mdash; so someone guesses, or skips it entirely.</p>
+						</div>
+						<div class="pain-card reveal" data-delay="2">
+							<span class="ic"><i data-lucide="folder-search"></i></span>
+							<h3>The paperwork scramble</h3>
+							<p>Vaccination records in a drawer, vet notes in an email, insurance in a camera roll.</p>
+						</div>
+						<div class="pain-card reveal" data-delay="3">
+							<span class="ic"><i data-lucide="alarm-clock"></i></span>
+							<h3>The panic gap</h3>
+							<p>When a pet goes missing or eats something toxic, every second spent explaining is a second lost.</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="shift-bar reveal">
+					<div class="shift-side before">
+						<span class="ic"><i data-lucide="x"></i></span>
+						<span><b>Before</b><small>14 threads · 3 apps · 1 anxious household</small></span>
+					</div>
+					<i class="bi bi-arrow-right shift-arrow"></i>
+					<div class="shift-side after">
+						<span class="ic"><i data-lucide="check"></i></span>
+						<span><b>With OmniPaw</b><small>One live care plan, visible to everyone</small></span>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ============ 05 AUTHORITY ============ -->
+		<section class="section authority" id="features">
+			<div class="container">
+				<div class="row g-4 align-items-end">
+					<div class="col-lg-8 reveal">
+						<span class="eyebrow">05 &mdash; Authority</span>
+						<h2>Built with sitters, vet techs, and people who've done <span class="hl">the 2am pharmacy run.</span></h2>
+					</div>
+					<div class="col-lg-4 reveal" data-delay="1">
+						<p class="mb-0 muted">OmniPaw wasn't designed in a boardroom. It was shaped alongside the caregivers who use it &mdash; professionals who need details at a glance, and families who need peace of mind.</p>
+					</div>
+				</div>
+
+				<div class="cred-row reveal" data-delay="1">
+					<span class="cred"><i data-lucide="stethoscope"></i> Designed with veterinary input</span>
+					<span class="cred"><i data-lucide="user-check"></i> Tested by professional sitters</span>
+					<span class="cred"><i data-lucide="lock"></i> Encrypted, role-based access</span>
+					<span class="cred"><i data-lucide="siren"></i> Emergency-first by default</span>
+				</div>
+
+				<div class="bento">
+					<article class="bento-card span-7 reveal">
+						<span class="icon-badge"><i data-lucide="pill"></i></span>
+						<h3>Meds &amp; meals, without the guesswork</h3>
+						<p>Schedule doses and meals, assign them to a caregiver, and mark them done. Everyone sees the same status in real time &mdash; no more &ldquo;did you give it?&rdquo;</p>
+						<div class="bento-visual mini-panel">
+							<div class="ms-row">
+								<span class="ms-check"><i class="bi bi-check-lg"></i></span>
+								<span class="ms-info"><b>Breakfast · 1 cup</b><small>8:00 AM · scheduled by Maya</small></span>
+								<span class="ms-tag">Given 8:04</span>
+							</div>
+							<div class="ms-row">
+								<span class="ms-check"><i class="bi bi-check-lg"></i></span>
+								<span class="ms-info"><b>Apoquel 16 mg</b><small>12:30 PM · with food</small></span>
+								<span class="ms-tag">Given 12:28</span>
+							</div>
+							<div class="ms-row">
+								<span class="ms-check due"><i data-lucide="clock"></i></span>
+								<span class="ms-info"><b>Joint supplement</b><small>9:00 PM · assigned to Ben</small></span>
+								<span class="ms-tag pending">Due in 34 min</span>
+							</div>
+						</div>
+					</article>
+
+					<article class="bento-card span-5 reveal" data-delay="1">
+						<span class="icon-badge"><i data-lucide="folder-lock"></i></span>
+						<h3>Every record, one tap away</h3>
+						<p>Scan and store vet recommendations, health histories, and certificates. Searchable exactly when you need them.</p>
+						<div class="bento-visual mini-panel">
+							<div class="doc-row">
+								<span class="doc-ic"><i data-lucide="file-text"></i></span>
+								<span class="doc-info"><b>Vaccination record.pdf</b><small>Updated Mar 2026</small></span>
+								<i class="bi bi-check-circle-fill"></i>
+							</div>
+							<div class="doc-row">
+								<span class="doc-ic"><i data-lucide="clipboard-list"></i></span>
+								<span class="doc-info"><b>Vet notes &mdash; Dr. Ortiz</b><small>Feb 2026 · allergy plan</small></span>
+								<i class="bi bi-check-circle-fill"></i>
+							</div>
+							<div class="doc-row">
+								<span class="doc-ic"><i data-lucide="shield"></i></span>
+								<span class="doc-info"><b>Pet insurance policy</b><small>Renews Aug 2026</small></span>
+								<i class="bi bi-check-circle-fill"></i>
+							</div>
+						</div>
+					</article>
+
+					<article class="bento-card span-7 reveal">
+						<span class="icon-badge"><i data-lucide="shield-alert"></i></span>
+						<h3>Safety that moves at the speed of worry</h3>
+						<p>A built-in toxic-product database, weight and measurement logs, and safety tracking &mdash; so a scary moment doesn't become a search engine moment.</p>
+						<div class="bento-visual">
+							<div class="toxic-box">
+								<form class="toxic-form" action="partials/toxic-check.php" method="get" hx-get="partials/toxic-check.php" hx-target="#toxicResult" hx-swap="innerHTML" hx-trigger="submit">
+									<label class="visually-hidden" for="toxicItem">Check a food or product</label>
+									<input id="toxicItem" name="item" type="text" placeholder="Is it toxic? Try &lsquo;chocolate&rsquo;" autocomplete="off" list="toxicList">
+									<button type="submit"><i data-lucide="search"></i> Check</button>
+								</form>
+								<datalist id="toxicList">
+									<option value="Chocolate"></option>
+									<option value="Grapes"></option>
+									<option value="Xylitol"></option>
+									<option value="Onion"></option>
+									<option value="Macadamia nuts"></option>
+									<option value="Lily"></option>
+								</datalist>
+								<div class="toxic-chips">
+									<button type="button" class="toxic-chip" data-item="Chocolate">Chocolate</button>
+									<button type="button" class="toxic-chip" data-item="Grapes">Grapes</button>
+									<button type="button" class="toxic-chip" data-item="Xylitol">Xylitol</button>
+									<button type="button" class="toxic-chip" data-item="Onion">Onion</button>
+									<button type="button" class="toxic-chip" data-item="Lily">Lily</button>
+								</div>
+								<div class="toxic-result" id="toxicResult" aria-live="polite">
+									<p class="toxic-hint">Quick guide only &mdash; always confirm with your vet or a pet poison helpline.</p>
+								</div>
+							</div>
+						</div>
+					</article>
+
+					<article class="bento-card span-5 reveal" data-delay="1">
+						<span class="icon-badge"><i data-lucide="radio-tower"></i></span>
+						<h3>If she goes missing, everyone knows</h3>
+						<p>The missing pet alert notifies every co-caregiver instantly, with the details they need to help right away.</p>
+						<div class="bento-visual">
+							<div class="alert-card">
+								<div class="alert-top">
+									<span class="alert-ic"><i data-lucide="alert-triangle"></i></span>
+									<span><b>Luna is missing</b><small>Alert sent 2 seconds ago</small></span>
+								</div>
+								<p>Last seen near Maple &amp; 4th, 6:20 PM. Wearing a red collar. Do not chase &mdash; call her name and offer treats.</p>
+								<div class="alert-foot">
+									<span class="alert-avatars">
+										<img src="https://i.pravatar.cc/48?img=47" alt="" loading="lazy">
+										<img src="https://i.pravatar.cc/48?img=15" alt="" loading="lazy">
+										<img src="https://i.pravatar.cc/48?img=32" alt="" loading="lazy">
+										<span>+3</span>
+									</span>
+									<span class="alert-btn">6 caregivers notified</span>
+								</div>
+							</div>
+						</div>
+					</article>
+				</div>
+
+				<div class="extras-row reveal">
+					<span class="extra-pill"><i data-lucide="scale"></i> Weight &amp; measurement logs</span>
+					<span class="extra-pill"><i data-lucide="line-chart"></i> Health trends over time</span>
+					<span class="extra-pill"><i data-lucide="cat"></i> Multiple pets, one profile</span>
+					<span class="extra-pill"><i data-lucide="history"></i> Full care history</span>
+				</div>
+			</div>
+		</section>
+
+		<!-- ============ PLATFORM / THREE OFFERINGS ============ -->
+		<section class="section audience on-dark" id="platform">
+			<div class="container">
+				<div class="row g-4 align-items-end">
+					<div class="col-lg-7 reveal">
+						<span class="eyebrow">The platform</span>
+						<h2>One care hub. <span class="hl">Three ways in.</span></h2>
+					</div>
+					<div class="col-lg-5 reveal" data-delay="1">
+						<p class="lede mb-0">Tailored for the people actually doing the caring &mdash; partners and families, professional sitters, and boarding facilities. Same pet, same truth, different view.</p>
+					</div>
+				</div>
+
+				<div class="aud-tabs reveal" role="tablist" aria-label="OmniPaw offerings">
+					<button type="button" class="aud-tab is-active" role="tab" aria-selected="true" data-tab="app" hx-get="partials/audience-app.html" hx-target="#audiencePanel" hx-swap="innerHTML" hx-indicator="#audiencePanel">
+						<i data-lucide="smartphone"></i> OmniPaw App
+					</button>
+					<button type="button" class="aud-tab" role="tab" aria-selected="false" data-tab="sitters" hx-get="partials/audience-sitters.html" hx-target="#audiencePanel" hx-swap="innerHTML" hx-indicator="#audiencePanel">
+						<i data-lucide="footprints"></i> Sitter Mode
+					</button>
+					<button type="button" class="aud-tab" role="tab" aria-selected="false" data-tab="facilities" hx-get="partials/audience-facilities.html" hx-target="#audiencePanel" hx-swap="innerHTML" hx-indicator="#audiencePanel">
+						<i data-lucide="building-2"></i> Boarding View <span class="tag">Beta</span>
+					</button>
+				</div>
+
+				<div class="aud-panel reveal" id="audiencePanel" aria-live="polite">
+					<div class="aud-inner">
+						<div>
+							<div class="aud-badges">
+								<span class="aud-badge"><i data-lucide="check-circle-2"></i> Available now</span>
+							</div>
+							<p class="aud-for">For partners, families &amp; sitters</p>
+							<h3>OmniPaw App</h3>
+							<p>The core hub for everyone who shares Luna's day. Plan care, check it off, and see it update live &mdash; from anywhere.</p>
+							<ul class="aud-list">
+								<li><span class="tick"><i data-lucide="check"></i></span><span><b>Medication &amp; feeding plans.</b> Schedule doses and meals, then mark them completed so others see status in real time.</span></li>
+								<li><span class="tick"><i data-lucide="check"></i></span><span><b>Document &amp; health storage.</b> Scan and upload vet recommendations, health histories, and certificates.</span></li>
+								<li><span class="tick"><i data-lucide="check"></i></span><span><b>Safety &amp; utilities.</b> Toxic-product database, weight logs, and a missing pet alert that reaches every caregiver.</span></li>
+							</ul>
+							<a class="btn btn-clay" href="#start">Create your care hub <i class="bi bi-arrow-right"></i></a>
+						</div>
+						<div class="aud-visual">
+							<div class="brief-card">
+								<div class="brief-head"><b>Today · Luna</b><span>3 of 5 done</span></div>
+								<div class="brief-row">
+									<span class="ic"><i data-lucide="utensils"></i></span>
+									<span><b>Breakfast given</b><small>8:00 AM · by Maya · logged</small></span>
+								</div>
+								<div class="brief-row">
+									<span class="ic"><i data-lucide="pill"></i></span>
+									<span><b>Apoquel 16 mg due</b><small>12:30 PM · with food · tap to mark</small></span>
+								</div>
+								<div class="brief-row">
+									<span class="ic"><i data-lucide="activity"></i></span>
+									<span><b>Weight logged</b><small>28.4 kg · today, 7:10 AM</small></span>
+								</div>
+								<div class="brief-foot"><i data-lucide="refresh-cw"></i> Updated live for all 4 caregivers</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ============ HOW IT WORKS ============ -->
+		<section class="section" id="how">
+			<div class="container">
+				<div class="row g-4 align-items-end">
+					<div class="col-lg-7 reveal">
+						<span class="eyebrow">Getting started</span>
+						<h2>Three steps to a <span class="hl">calmer care team.</span></h2>
+					</div>
+					<div class="col-lg-5 reveal" data-delay="1">
+						<p class="mb-0 muted">No training sessions, no spreadsheets to migrate. Most families are sharing care within a single evening.</p>
+					</div>
+				</div>
+
+				<div class="steps">
+					<article class="step reveal">
+						<span class="step-num">01</span>
+						<span class="step-ic"><i data-lucide="clipboard-plus"></i></span>
+						<h3>Build your pet's profile</h3>
+						<p>Add the essentials in about four minutes: meals, medications, vet details, and the quirks only you know.</p>
+					</article>
+					<article class="step reveal" data-delay="1">
+						<span class="step-num">02</span>
+						<span class="step-ic"><i data-lucide="users-round"></i></span>
+						<h3>Invite your care circle</h3>
+						<p>Partner, family, sitter, boarding facility. Each person gets the access they need &mdash; nothing more.</p>
+					</article>
+					<article class="step reveal" data-delay="2">
+						<span class="step-num">03</span>
+						<span class="step-ic"><i data-lucide="hand-heart"></i></span>
+						<h3>Hand off with confidence</h3>
+						<p>Everyone works from the same live plan and gets updates as care happens. No chasing, no guessing.</p>
+					</article>
+				</div>
+			</div>
+		</section>
+
+		<!-- ============ 06 ACTION ============ -->
+		<section class="section action" id="start">
+			<div class="container">
+				<div class="action-card reveal">
+					<div class="action-content">
+						<span class="eyebrow on-dark" style="color:var(--sage-2)">06 &mdash; Action</span>
+						<h2>Tonight, someone else can know exactly <span class="hl">what Luna needs.</span></h2>
+						<p>Create your pet's care hub in under five minutes, then invite your first caregiver for free. No spreadsheets, no group-chat archaeology, no guessing.</p>
+
+						<form class="action-form" action="partials/start.php" method="post" hx-post="partials/start.php" hx-target="#startResult" hx-swap="innerHTML" hx-disabled-elt="find button">
+							<label class="visually-hidden" for="startEmail">Email address</label>
+							<input class="form-control" id="startEmail" type="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+							<button class="btn btn-cream" type="submit">Get my free care hub <i class="bi bi-arrow-right"></i></button>
+						</form>
+						<div id="startResult" aria-live="polite"></div>
+
+						<p class="action-note"><i data-lucide="shield-check"></i> Free for your first pet &middot; no credit card &middot; cancel anytime. We'll send one setup link, never spam.</p>
+						<p class="action-secondary">Planning care for a boarding facility or clinic? <a href="partials/start.php?type=team">Book a 15-minute walkthrough <i class="bi bi-arrow-right"></i></a></p>
+					</div>
+					<div class="action-media">
+						<img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=900&q=80" alt="A happy dog waiting for its caregiver" loading="lazy">
+						<div class="action-tag">Luna, 4 &middot; cared for by 4 people<span>Now all of them know what's next.</span></div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<!-- ============ FOOTER ============ -->
+	<footer class="site-footer">
+		<div class="container">
+			<div class="footer-top">
+				<div class="footer-brand">
+					<a class="brand" href="#top" aria-label="OmniPaw home">
+						<span class="brand-mark"><i data-lucide="paw-print"></i></span>
+						<span class="brand-name">Omni<b>Paw</b></span>
+					</a>
+					<p>The shared care hub for pet owners, families, sitters, and boarding facilities. One pet, one plan, everyone in sync.</p>
+				</div>
+				<div class="footer-col">
+					<h4>Product</h4>
+					<ul>
+						<li><a href="#features">Features</a></li>
+						<li><a href="#platform">For your circle</a></li>
+						<li><a href="#how">How it works</a></li>
+						<li><a href="#start">Get started</a></li>
+					</ul>
+				</div>
+				<div class="footer-col">
+					<h4>Company</h4>
+					<ul>
+						<li><a href="#trust">Reviews</a></li>
+						<li><a href="#start">Contact</a></li>
+						<li><a href="#top">Privacy</a></li>
+						<li><a href="#top">Terms</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="footer-bottom">
+				<span>&copy; 2026 OmniPaw. All rights reserved.</span>
+				<span class="made">Made for pet people <i data-lucide="heart" style="width:14px;height:14px;color:var(--clay)"></i></span>
+			</div>
+		</div>
+	</footer>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.4/dist/htmx.min.js"></script>
+	<script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+	<script>
+	(function () {
+		'use strict';
+
+		var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+		function icons() { if (window.lucide) { window.lucide.createIcons(); } }
+		icons();
+
+		/* nav shadow */
+		var nav = document.getElementById('siteNav');
+		var bar = document.getElementById('scrollBar');
+		function onScroll() {
+			var y = window.scrollY || window.pageYOffset;
+			if (nav) { nav.classList.toggle('is-scrolled', y > 12); }
+			if (bar) {
+				var h = document.documentElement.scrollHeight - window.innerHeight;
+				bar.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+			}
+		}
+		window.addEventListener('scroll', onScroll, { passive: true });
+		onScroll();
+
+		/* reveal on scroll (progressive: content stays visible without JS) */
+		var reveals = document.querySelectorAll('.reveal');
+		if (reduce || !('IntersectionObserver' in window)) {
+			reveals.forEach(function (el) { el.classList.add('is-in'); });
+		} else {
+			var io = new IntersectionObserver(function (entries) {
+				entries.forEach(function (entry) {
+					if (entry.isIntersecting) { entry.target.classList.add('is-in'); io.unobserve(entry.target); }
+				});
+			}, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+			reveals.forEach(function (el) {
+				var box = el.getBoundingClientRect();
+				if (box.top < window.innerHeight * 0.92 && box.bottom > 0) {
+					el.classList.add('is-in');
+				} else {
+					el.classList.add('is-hidden');
+					io.observe(el);
+				}
+			});
+			window.addEventListener('load', function () {
+				document.querySelectorAll('.reveal.is-hidden').forEach(function (el) {
+					if (el.getBoundingClientRect().top < window.innerHeight * 0.98) { el.classList.add('is-in'); }
+				});
+			});
+		}
+
+		/* mobile nav: close after choosing a link */
+		var menu = document.getElementById('mainNav');
+		if (menu) {
+			menu.querySelectorAll('a').forEach(function (a) {
+				a.addEventListener('click', function () {
+					if (menu.classList.contains('show') && window.bootstrap) {
+						window.bootstrap.Collapse.getOrCreateInstance(menu).hide();
+					}
+				});
+			});
+		}
+
+		/* offering tabs */
+		var tabs = Array.prototype.slice.call(document.querySelectorAll('.aud-tab'));
+		tabs.forEach(function (tab) {
+			tab.addEventListener('click', function () {
+				tabs.forEach(function (t) {
+					t.classList.remove('is-active');
+					t.setAttribute('aria-selected', 'false');
+				});
+				tab.classList.add('is-active');
+				tab.setAttribute('aria-selected', 'true');
+			});
+		});
+
+		/* toxic quick-check chips */
+		document.querySelectorAll('.toxic-chip').forEach(function (chip) {
+			chip.addEventListener('click', function () {
+				var input = document.getElementById('toxicItem');
+				var form = chip.closest('.toxic-box').querySelector('form');
+				if (input) { input.value = chip.getAttribute('data-item'); }
+				if (form && form.requestSubmit) { form.requestSubmit(); }
+			});
+		});
+
+		/* re-render icons + loading state after every htmx swap */
+		document.body.addEventListener('htmx:beforeRequest', function (e) {
+			var ind = e.detail.elt.getAttribute && e.detail.elt.getAttribute('hx-indicator');
+			if (ind) { var el = document.querySelector(ind); if (el) el.classList.add('is-loading'); }
+		});
+		document.body.addEventListener('htmx:afterSwap', function (e) {
+			icons();
+			if (e.detail.target) { e.detail.target.classList.remove('is-loading'); }
+		});
+		document.body.addEventListener('htmx:responseError', function (e) {
+			if (e.detail.target) { e.detail.target.classList.remove('is-loading'); }
+		});
+	})();
+	</script>
+</body>
+</html>
