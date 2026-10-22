@@ -1,7 +1,8 @@
+# 🐾 Pikallo
 
-# 🐾 OmniPaw
+**Pikallo** is a web application that simplifies shared pet care by keeping tracking tools, health schedules, and documents in one unified location.
 
-**OmniPaw** is a web application that simplifies shared pet care by keeping tracking tools, health schedules, and documents in one unified location.
+Website: https://pikallo.com
 
 ## ✨ Features
 
@@ -12,20 +13,20 @@
 
 ## 👥 Who It's For
 
-OmniPaw is built primarily for:
+Pikallo is built primarily for:
 
 - Pet owners
 - Families sharing pet responsibilities
 - Pet sitters
 - Boarding facilities
 
-With OmniPaw, care responsibilities can be handed off smoothly — without losing track of important routines.
+With Pikallo, care responsibilities can be handed off smoothly — without losing track of important routines.
 
 ## 🚀 Getting Started
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/omnipaw.git
+   git clone https://github.com/your-username/pikallo.git
    ```
 
 ## 🤝 Contributing
