@@ -56,8 +56,8 @@ if (!empty($htmlPaths)) {
 				No <code>.html</code> files found.
 			</div>
 		<?php else: ?>
-
 			<p class="ps-1"><?= htmlspecialchars($randomPath, ENT_QUOTES, 'UTF-8') ?></p>
+			<button type="button" class="btn btn-success" style="position: fixed; top: 0px; right: 10px;" onclick="reloadWithNewDesign()">new design</button>
 
 			<div class="card shadow-sm">
 				<div class="card-body p-0" style="height: calc(100vh - 20px); min-height: 520px;">
@@ -69,9 +69,6 @@ if (!empty($htmlPaths)) {
 				</div>
 			</div>
 		<?php endif; ?>
-		<div class="text-center py-3">
-			<button type="button" class="btn btn-success" style="position: fixed; top: 0px; right: 10px;" onclick="reloadWithNewDesign()">new design</button>
-		</div>
 	</main>
 	<script>
 		function reloadWithNewDesign() {
