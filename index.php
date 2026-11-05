@@ -50,21 +50,17 @@ if (!empty($htmlPaths)) {
 </head>
 
 <body class="bg-body-tertiary">
-	<main class="containerfluid">
+	<main>
 		<?php if ($randomUrl === null): ?>
 			<div class="alert alert-warning" role="alert">
 				No <code>.html</code> files found.
 			</div>
 		<?php else: ?>
-			<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
-				<div>
-					<p>Current file: <?= htmlspecialchars($randomPath, ENT_QUOTES, 'UTF-8') ?></p>
-				</div>
-				<a href="index.php" class="btn btn-primary btn-sm">Load another webdesign</a>
-			</div>
+
+			<p class="ps-1"><?= htmlspecialchars($randomPath, ENT_QUOTES, 'UTF-8') ?></p>
 
 			<div class="card shadow-sm">
-				<div class="card-body p-0" style="height: calc(100vh - 100px); min-height: 520px;">
+				<div class="card-body p-0" style="height: calc(100vh - 20px); min-height: 520px;">
 					<iframe
 						src="<?= htmlspecialchars($randomUrl, ENT_QUOTES, 'UTF-8') ?>"
 						title="Random HTML Preview"
@@ -73,7 +69,15 @@ if (!empty($htmlPaths)) {
 				</div>
 			</div>
 		<?php endif; ?>
+		<div class="text-center py-3">
+			<button type="button" class="btn btn-success" style="position: fixed; top: 0px; right: 10px;" onclick="reloadWithNewDesign()">new design</button>
+		</div>
 	</main>
+	<script>
+		function reloadWithNewDesign() {
+			window.location.href = 'index.php?r=' + Date.now();
+		}
+	</script>
 </body>
 
 </html>
