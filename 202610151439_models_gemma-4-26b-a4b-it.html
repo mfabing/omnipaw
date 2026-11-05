@@ -1,32 +1,30 @@
-```html
-
 <!DOCTYPE html>
 
 <html lang="en">
 
 <head>
-    
+
 <meta charset="UTF-8">
-    
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
 <title>Pikallo | Shared Care, Simplified.
 </title>
-    
-    
+
+
 <!-- Bootstrap 5 CSS -->
-    
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
 <!-- Google Fonts -->
-    
+
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Outfit:wght@300;600;800&display=swap" rel="stylesheet">
-    
+
 <!-- Bootstrap Icons -->
-    
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
-    
+
 <style>
         :root {
             --bg-color: #FDFBF7;
@@ -134,180 +132,180 @@
             pointer-events: none;
             z-index: 9999;
         }
-    
+
 </style>
 
 </head>
 
 <body>
 
-    
+
 <div id="cursor-dot">
 </div>
-    
+
 <div id="canvas-container">
 </div>
 
-    
+
 <!-- Navigation -->
-    
+
 <nav class="navbar navbar-expand-lg fixed-top">
-        
+
 <div class="container">
-            
+
 <a class="navbar-brand fw-bold" href="#">PIKALLO
 </a>
-            
+
 <div class="ms-auto">
-                
+
 <a href="#waitlist" class="btn btn-primary-custom btn-sm">Join Waitlist
 </a>
-            
+
 </div>
-        
+
 </div>
-    
+
 </nav>
 
-    
+
 <!-- Hero Section -->
-    
+
 <section class="hero-section container">
-        
+
 <div class="row">
-            
+
 <div class="col-12">
-                
+
 <h1 class="hero-title mb-4 reveal-text">One Heart.
 <br>All the Details.
 </h1>
-                
+
 <p class="lead text-muted mb-5 reveal-text">The central nervous system for your pet's shared care.
 </p>
-                
+
 <div class="reveal-text">
-                    
+
 <i class="bi bi-chevron-down fs-2 animate-bounce">
 </i>
-                
+
 </div>
-            
+
 </div>
-        
+
 </div>
-    
+
 </section>
 
-    
+
 <!-- Features Section -->
-    
+
 <section class="container py-5">
-        
+
 <div class="row g-4">
-            
+
 <div class="col-md-4 feature-item">
-                
+
 <div class="feature-card h-100">
-                    
+
 <i class="bi bi-shield-check fs-1 text-success mb-3">
 </i>
-                    
+
 <h3>Vital Sync
 </h3>
-                    
+
 <p class="text-muted">Medical records, allergies, and schedules synchronized across all caregivers instantly.
 </p>
-                
+
 </div>
-            
+
 </div>
-            
+
 <div class="col-md-4 feature-item">
-                
+
 <div class="feature-card h-100">
-                    
+
 <i class="bi bi-people fs-1 text-success mb-3">
 </i>
-                    
+
 <h3>Shared Access
 </h3>
-                    
+
 <p class="text-muted">Family, sitters, and vets on one seamless, secure dashboard.
 </p>
-                
+
 </div>
-            
+
 </div>
-            
+
 <div class="col-md-4 feature-item">
-                
+
 <div class="feature-card h-100">
-                    
+
 <i class="bi bi-bell fs-1 text-success mb-3">
 </i>
-                    
+
 <h3>Smart Alerts
 </h3>
-                    
+
 <p class="text-muted">Never miss a medication dose or a vet appointment ever again.
 </p>
-                
+
 </div>
-            
+
 </div>
-        
+
 </div>
-    
+
 </section>
 
-    
+
 <!-- Waitlist Section -->
-    
+
 <section id="waitlist" class="container mb-5">
-        
+
 <div class="waitlist-box text-center">
-            
+
 <h2 class="display-4 mb-3">Be the first to walk.
 </h2>
-            
+
 <p class="mb-5 text-muted">We're launching soon. Join 500+ pet parents on the exclusive early-access list.
 </p>
-            
-            
+
+
 <form class="row g-3 justify-content-center">
-                
+
 <div class="col-md-4">
-                    
+
 <input type="email" class="form-control" placeholder="Enter your email address">
-                
+
 </div>
-                
+
 <div class="col-auto">
-                    
+
 <button type="submit" class="btn btn-primary-custom">Get Early Access
 </button>
-                
+
 </div>
-            
+
 </form>
-        
+
 </div>
-    
+
 </section>
 
-    
+
 <!-- Scripts -->
-    
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js">
 </script>
-    
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js">
 </script>
-    
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js">
 </script>
 
-    
+
 <script>
         // 1. CUSTOM CURSOR
         const dot = document.getElementById('cursor-dot');
@@ -324,8 +322,8 @@
 
         // Create a soft, organic shape (Icosahedron)
         const geometry = new THREE.IcosahedronGeometry(2, 1);
-        const material = new THREE.MeshPhongMaterial({ 
-            color: 0x6B8E23, 
+        const material = new THREE.MeshPhongMaterial({
+            color: 0x6B8E23,
             wireframe: true,
             transparent: true,
             opacity: 0.2
@@ -398,7 +396,7 @@
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
-    
+
 </script>
 
 </body>
