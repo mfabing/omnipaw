@@ -45,7 +45,8 @@ if (!empty($htmlPaths)) {
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>HTML Random Viewer</title>
+	<title>Pikallo</title>
+	<meta name="description" content="Pikallo previews a random HTML design from your project folder so you can quickly explore and test layouts.">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/css/bootstrap.min.css">
 </head>
 
